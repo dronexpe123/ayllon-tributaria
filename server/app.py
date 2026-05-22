@@ -84,13 +84,19 @@ def init_db():
         cur.execute('''CREATE TABLE IF NOT EXISTS cursos (
             id SERIAL PRIMARY KEY,
             titulo TEXT NOT NULL,
+            resumen TEXT,
             descripcion TEXT,
+            contenido TEXT,
+            imagen TEXT,
             modalidad TEXT DEFAULT 'Presencial',
             precio TEXT,
             duracion TEXT,
             estado TEXT DEFAULT 'activo',
             fecha TIMESTAMPTZ DEFAULT NOW()
         )''')
+        cur.execute('''ALTER TABLE cursos ADD COLUMN IF NOT EXISTS resumen TEXT''')
+        cur.execute('''ALTER TABLE cursos ADD COLUMN IF NOT EXISTS contenido TEXT''')
+        cur.execute('''ALTER TABLE cursos ADD COLUMN IF NOT EXISTS imagen TEXT''')
         cur.execute('''CREATE TABLE IF NOT EXISTS mensajes (
             id SERIAL PRIMARY KEY,
             nombre TEXT,
@@ -176,9 +182,10 @@ def get_cursos():
 @require_admin
 def create_curso():
     d = request.json
-    query('''INSERT INTO cursos (titulo, descripcion, modalidad, precio, duracion, estado)
-        VALUES (%s,%s,%s,%s,%s,%s)''',
-        (d.get('titulo'), d.get('descripcion'), d.get('modalidad','Presencial'),
+    query('''INSERT INTO cursos (titulo, resumen, descripcion, contenido, imagen, modalidad, precio, duracion, estado)
+        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)''',
+        (d.get('titulo'), d.get('resumen'), d.get('descripcion'), d.get('contenido'),
+         d.get('imagen'), d.get('modalidad','Presencial'),
          d.get('precio'), d.get('duracion'), d.get('estado','activo')),
         commit=True)
     return jsonify({'ok': True})
@@ -187,9 +194,10 @@ def create_curso():
 @require_admin
 def update_curso(id):
     d = request.json
-    query('''UPDATE cursos SET titulo=%s, descripcion=%s, modalidad=%s,
-        precio=%s, duracion=%s, estado=%s WHERE id=%s''',
-        (d.get('titulo'), d.get('descripcion'), d.get('modalidad'),
+    query('''UPDATE cursos SET titulo=%s, resumen=%s, descripcion=%s, contenido=%s,
+        imagen=%s, modalidad=%s, precio=%s, duracion=%s, estado=%s WHERE id=%s''',
+        (d.get('titulo'), d.get('resumen'), d.get('descripcion'), d.get('contenido'),
+         d.get('imagen'), d.get('modalidad'),
          d.get('precio'), d.get('duracion'), d.get('estado'), id),
         commit=True)
     return jsonify({'ok': True})

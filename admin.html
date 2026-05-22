@@ -366,8 +366,17 @@
               <input type="text" id="curso-duracion" placeholder="Ej: 3 días / 12 horas">
             </div>
             <div class="form-field full">
-              <label>Descripción *</label>
-              <textarea id="curso-descripcion" rows="4" placeholder="Descripción del curso..."></textarea>
+              <label>Imagen del curso *</label>
+              <input type="file" id="curso-img" accept="image/*">
+              <img class="img-preview" id="prev-curso">
+            </div>
+            <div class="form-field full">
+              <label>Resumen (para las tarjetas) *</label>
+              <input type="text" id="curso-resumen" placeholder="Breve descripción que aparece en la tarjeta...">
+            </div>
+            <div class="form-field full">
+              <label>Descripción completa *</label>
+              <textarea id="curso-descripcion" rows="4" placeholder="Descripción completa del curso para la subpágina..."></textarea>
             </div>
           </div>
           <div class="form-actions">
@@ -612,6 +621,7 @@
   setupPreview('blog-img-portada', 'prev-portada');
   setupPreview('blog-img-medio', 'prev-medio');
   setupPreview('blog-img-final', 'prev-final');
+  setupPreview('curso-img', 'prev-curso');
 
   // ── BLOGS ──
   async function cargarBlogsTabla() {
@@ -768,13 +778,17 @@
 
     try {
       const editId = document.getElementById('curso-edit-id').value;
+      const imgFile = document.getElementById('curso-img').files[0];
+      const urlImg = imgFile ? await subirImagen(imgFile, 'cursos') : null;
       const datos = {
         titulo,
+        resumen:     document.getElementById('curso-resumen').value.trim(),
         modalidad:   document.getElementById('curso-modalidad').value,
         precio:      document.getElementById('curso-precio').value,
         duracion:    document.getElementById('curso-duracion').value.trim(),
         descripcion: desc,
       };
+      if (urlImg) datos.imagen = urlImg;
 
       if (editId) {
         await db.updateCurso(editId, datos);
@@ -795,7 +809,9 @@
   });
 
   function limpiarFormCurso() {
-    ['curso-titulo','curso-precio','curso-duracion','curso-descripcion'].forEach(id => document.getElementById(id).value = '');
+    ['curso-titulo','curso-resumen','curso-precio','curso-duracion','curso-descripcion'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('curso-img').value = '';
+    document.getElementById('prev-curso').classList.remove('visible');
     document.getElementById('curso-edit-id').value = '';
     document.getElementById('curso-form-titulo').textContent = '➕ Nuevo curso';
     document.getElementById('btn-guardar-curso').textContent = 'Guardar curso';
@@ -808,10 +824,12 @@
     if (!c) return;
     document.getElementById('curso-edit-id').value      = id;
     document.getElementById('curso-titulo').value       = c.titulo || '';
+    document.getElementById('curso-resumen').value      = c.resumen || '';
     document.getElementById('curso-modalidad').value    = c.modalidad || 'Presencial';
     document.getElementById('curso-precio').value       = c.precio || '';
     document.getElementById('curso-duracion').value     = c.duracion || '';
     document.getElementById('curso-descripcion').value  = c.descripcion || '';
+    if (c.imagen) { document.getElementById('prev-curso').src = c.imagen; document.getElementById('prev-curso').classList.add('visible'); }
     document.getElementById('curso-form-titulo').textContent = '✏️ Editando curso';
     document.getElementById('btn-guardar-curso').textContent = 'Guardar cambios';
     document.getElementById('btn-cancelar-curso').style.display = 'inline-flex';
