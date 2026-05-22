@@ -350,6 +350,8 @@
   // VISTA LISTA / DETALLE
   function mostrarDetalle(c) {
     document.getElementById('cursos-section').style.display = 'none';
+    document.querySelector('.cta-section').style.display = 'none';
+    document.querySelector('footer').style.display = 'none';
     const det = document.getElementById('curso-detalle');
     det.style.display = 'block';
     det.innerHTML = `
@@ -370,6 +372,8 @@
       e.preventDefault();
       det.style.display = 'none';
       document.getElementById('cursos-section').style.display = 'block';
+      document.querySelector('.cta-section').style.display = 'block';
+      document.querySelector('footer').style.display = 'block';
       window.scrollTo(0, 0);
     });
     window.scrollTo(0, 0);

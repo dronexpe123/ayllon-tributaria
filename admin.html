@@ -820,7 +820,7 @@
 
   window.editarCurso = async function(id) {
     const cursos = await db.getCursos();
-    const c = cursos.find(x => x.id === id);
+    const c = cursos.find(x => String(x.id) === String(id));
     if (!c) return;
     document.getElementById('curso-edit-id').value      = id;
     document.getElementById('curso-titulo').value       = c.titulo || '';
