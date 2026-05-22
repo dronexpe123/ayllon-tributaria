@@ -468,17 +468,11 @@
   </div>
 
   <script type="module">
-  import {
-    db, auth,
-    signInWithEmailAndPassword, signOut, onAuthStateChanged,
-    showToast, formatDate
-  } from './js/main.js';
+  import { db, auth, showToast, formatDate } from './js/main.js';
 
   // ── AUTH ──
-  onAuthStateChanged(auth, user => {
-    if (user) mostrarPanel();
-    else mostrarLogin();
-  });
+  if (auth.isLoggedIn()) mostrarPanel();
+  else mostrarLogin();
 
   function mostrarLogin() {
     document.getElementById('login-wrap').style.display = 'flex';
@@ -504,7 +498,8 @@
     btn.disabled = true; btn.textContent = 'Ingresando...';
     err.style.display = 'none';
     try {
-      await signInWithEmailAndPassword(auth, email, pass);
+      const ok = auth.login(email, pass);
+      if (!ok) throw new Error('Credenciales incorrectas');
     } catch (e) {
       err.style.display = 'block';
       btn.disabled = false; btn.textContent = 'Ingresar →';
@@ -512,7 +507,8 @@
   });
 
   document.getElementById('btn-logout').addEventListener('click', async () => {
-    await signOut(auth);
+    auth.logout();
+    mostrarLogin();
   });
 
   // ── NAVEGACION SIDEBAR ──
