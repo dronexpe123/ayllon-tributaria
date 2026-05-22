@@ -370,7 +370,10 @@
     }
   }
 
-  cargarCursos();
+  (async () => {
+    await cargarCursos();
+    document.querySelectorAll('.animate-up').forEach(el => el.classList.add('visible'));
+  })();
 </script>
 
 </body>

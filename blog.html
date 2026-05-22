@@ -223,7 +223,7 @@
       return;
     }
     grid.innerHTML = lista.map(b => `
-      <div class="blog-card animate-up" onclick="abrirArticulo('${b.id}')">
+      <div class="blog-card" onclick="abrirArticulo('${b.id}')">
         <div class="blog-card-img">
           ${b.imagen_portada ? `<img src="${b.imagen_portada}" alt="${b.titulo}" loading="lazy">` : '📄'}
         </div>
