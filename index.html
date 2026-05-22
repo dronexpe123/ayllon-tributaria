@@ -500,413 +500,73 @@
   <a href="https://wa.me/59168064859" class="wa-float" title="WhatsApp">💬</a>
 
   <script type="module">
-  import { db, auth, showToast, formatDate } from './js/main.js';
+  import { db, formatDate } from './js/main.js';
 
-  // ── AUTH ──
-  function verificar() {
-    if (auth.isLoggedIn()) mostrarPanel();
-    else mostrarLogin();
-  }
-
-  function mostrarLogin() {
-    document.getElementById('login-wrap').style.display = 'flex';
-    document.getElementById('admin-wrap').classList.remove('visible');
-  }
-
-  function mostrarPanel() {
-    document.getElementById('login-wrap').style.display = 'none';
-    document.getElementById('admin-wrap').classList.add('visible');
-    cargarResumen();
-    cargarMensajes();
-    cargarBlogsTabla();
-    cargarCursosTabla();
-    cargarRedes();
-    cargarFotoPerfil();
-  }
-
-  document.getElementById('btn-login').addEventListener('click', () => {
-    const email = document.getElementById('login-email').value.trim();
-    const pass  = document.getElementById('login-pass').value;
-    const err   = document.getElementById('login-error');
-    if (auth.login(email, pass)) {
-      mostrarPanel();
-    } else {
-      err.style.display = 'block';
-    }
-  });
-
-  document.getElementById('btn-logout').addEventListener('click', () => {
-    auth.logout();
-    mostrarLogin();
-  });
-
-  verificar();
-
-  // ── NAVEGACION SIDEBAR ──
-  document.querySelectorAll('.sidebar-btn[data-tab]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
-    });
-  });
-
-  // ── RESUMEN ──
-  async function cargarResumen() {
-    try {
-      const [blogs, cursos, mensajes] = await Promise.all([
-        db.getBlogs(), db.getCursos(), db.getMensajes()
-      ]);
-      document.getElementById('stat-blogs').textContent    = blogs.length;
-      document.getElementById('stat-cursos').textContent   = cursos.length;
-      document.getElementById('stat-mensajes').textContent = mensajes.length;
-      document.getElementById('stat-nuevos').textContent   = mensajes.filter(m => !m.leido).length;
-    } catch(e) {}
-  }
-
-  // ── MENSAJES ──
-  async function cargarMensajes() {
-    const lista = document.getElementById('mensajes-lista');
-    try {
-      const mensajes = await db.getMensajes();
-      if (mensajes.length === 0) { lista.innerHTML = '<p style="color:var(--text-mid);padding:1rem">No hay mensajes aún.</p>'; return; }
-      lista.innerHTML = '';
-      mensajes.forEach(m => {
-        const div = document.createElement('div');
-        div.className = `mensaje-card ${!m.leido ? 'nuevo' : ''}`;
-        div.innerHTML = `
-          <div class="mensaje-card-header">
-            <div>
-              <p class="mensaje-nombre">${m.nombre} ${!m.leido ? '<span style="font-size:0.7rem;background:var(--gold-pale);color:var(--navy);padding:2px 8px;border-radius:999px;margin-left:6px">Nuevo</span>' : ''}</p>
-              <p class="mensaje-servicio">${m.servicio || 'Consulta general'}</p>
-            </div>
-            <span class="mensaje-fecha">${formatDate(m.fecha)}</span>
-          </div>
-          <p class="mensaje-texto">${m.mensaje}</p>
-          <div class="mensaje-contacto">
-            📧 <a href="mailto:${m.email}">${m.email}</a>
-            ${m.telefono ? ` &nbsp;|&nbsp; 📱 <a href="https://wa.me/${m.telefono.replace(/\D/g,'')}">${m.telefono}</a>` : ''}
-          </div>
-          <div style="margin-top:0.75rem;display:flex;gap:0.5rem;">
-            ${!m.leido ? `<button class="btn-sm btn-edit" onclick="marcarLeido('${m.id}', this)">Marcar como leído</button>` : ''}
-            <button class="btn-sm btn-danger" onclick="eliminarMensaje('${m.id}', this)">Eliminar</button>
-          </div>
-        `;
-        lista.appendChild(div);
-      });
-    } catch(e) { lista.innerHTML = '<p style="color:var(--text-mid);padding:1rem">Error al cargar mensajes.</p>'; }
-  }
-
-  window.marcarLeido = async function(id, btn) {
-    await db.updateMensaje(id, { leido: true });
-    btn.closest('.mensaje-card').classList.remove('nuevo');
-    btn.remove();
-    cargarResumen();
-  };
-
-  window.eliminarMensaje = async function(id, btn) {
-    if (!confirm('¿Eliminar este mensaje?')) return;
-    await db.deleteMensaje(id);
-    btn.closest('.mensaje-card').remove();
-    cargarResumen();
-  };
-
-  // ── SUBIR IMAGEN A CLOUDINARY ──
-  async function subirImagen(file, carpeta) {
-    if (!file) return null;
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', 'consultora');
-    formData.append('folder', `ayllon-tributaria/${carpeta}`);
-    const res = await fetch('https://api.cloudinary.com/v1_1/dhz8whvie/image/upload', {
-      method: 'POST', body: formData
-    });
-    const data = await res.json();
-    return data.secure_url;
-  }
-
-  // PREVIEW IMAGENES
-  function setupPreview(inputId, previewId) {
-    document.getElementById(inputId).addEventListener('change', e => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const prev = document.getElementById(previewId);
-      prev.src = URL.createObjectURL(file);
-      prev.classList.add('visible');
-    });
-  }
-  setupPreview('blog-img-portada', 'prev-portada');
-  setupPreview('blog-img-medio',   'prev-medio');
-  setupPreview('blog-img-final',   'prev-final');
-
-  // ── BLOGS ──
-  async function cargarBlogsTabla() {
-    const tbody = document.getElementById('blogs-tabla');
-    try {
-      const blogs = await db.getBlogs();
-      if (blogs.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="table-empty">No hay artículos publicados.</td></tr>'; return; }
-      tbody.innerHTML = '';
-      blogs.forEach(b => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${b.titulo}</strong></td>
-          <td><span class="badge badge-gold">${b.categoria || 'Tributación'}</span></td>
-          <td>${formatDate(b.fecha)}</td>
-          <td style="display:flex;gap:0.5rem;">
-            <button class="btn-sm btn-edit" onclick="editarBlog('${b.id}')">Editar</button>
-            <button class="btn-sm btn-danger" onclick="eliminarBlog('${b.id}', this)">Eliminar</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    } catch(e) { tbody.innerHTML = '<tr><td colspan="4" class="table-empty">Error al cargar.</td></tr>'; }
-  }
-
-  document.getElementById('btn-guardar-blog').addEventListener('click', async () => {
-    const titulo     = document.getElementById('blog-titulo').value.trim();
-    const contenido1 = document.getElementById('blog-contenido1').value.trim();
-    if (!titulo || !contenido1) { showToast('Título y contenido son obligatorios.', 'error'); return; }
-    const btn = document.getElementById('btn-guardar-blog');
-    btn.disabled = true; btn.textContent = 'Guardando...';
-    try {
-      const editId      = document.getElementById('blog-edit-id').value;
-      const portadaFile = document.getElementById('blog-img-portada').files[0];
-      const medioFile   = document.getElementById('blog-img-medio').files[0];
-      const finalFile   = document.getElementById('blog-img-final').files[0];
-      const [urlPortada, urlMedio, urlFinal] = await Promise.all([
-        portadaFile ? subirImagen(portadaFile, 'blogs') : Promise.resolve(null),
-        medioFile   ? subirImagen(medioFile,   'blogs') : Promise.resolve(null),
-        finalFile   ? subirImagen(finalFile,   'blogs') : Promise.resolve(null),
-      ]);
-      const datos = {
-        titulo,
-        categoria:            document.getElementById('blog-categoria').value,
-        autor:                document.getElementById('blog-autor').value.trim(),
-        resumen:              document.getElementById('blog-resumen').value.trim(),
-        contenido:            contenido1,
-        contenido2:           document.getElementById('blog-contenido2').value.trim(),
-        contenido3:           document.getElementById('blog-contenido3').value.trim(),
-        imagen_medio_caption: document.getElementById('blog-img-medio-caption').value.trim(),
-        imagen_final_caption: document.getElementById('blog-img-final-caption').value.trim(),
-      };
-      if (urlPortada) datos.imagen_portada = urlPortada;
-      if (urlMedio)   datos.imagen_medio   = urlMedio;
-      if (urlFinal)   datos.imagen_final   = urlFinal;
-      if (editId) { await db.updateBlog(editId, datos); showToast('Artículo actualizado.'); }
-      else        { await db.addBlog(datos);            showToast('Artículo publicado.');   }
-      limpiarFormBlog();
-      cargarBlogsTabla();
-      cargarResumen();
-    } catch(e) { showToast('Error: ' + e.message, 'error'); }
-    btn.disabled = false; btn.textContent = 'Publicar artículo';
-  });
-
-  function limpiarFormBlog() {
-    ['blog-titulo','blog-autor','blog-resumen','blog-contenido1','blog-contenido2','blog-contenido3','blog-img-medio-caption','blog-img-final-caption'].forEach(id => document.getElementById(id).value = '');
-    ['blog-img-portada','blog-img-medio','blog-img-final'].forEach(id => document.getElementById(id).value = '');
-    ['prev-portada','prev-medio','prev-final'].forEach(id => document.getElementById(id).classList.remove('visible'));
-    document.getElementById('blog-edit-id').value = '';
-    document.getElementById('blog-form-titulo').textContent = '➕ Nuevo artículo';
-    document.getElementById('btn-guardar-blog').textContent = 'Publicar artículo';
-    document.getElementById('btn-cancelar-blog').style.display = 'none';
-  }
-
-  window.editarBlog = async function(id) {
-    const b = await db.getBlog(id);
-    if (!b) return;
-    document.getElementById('blog-edit-id').value    = id;
-    document.getElementById('blog-titulo').value     = b.titulo || '';
-    document.getElementById('blog-categoria').value  = b.categoria || 'Tributación';
-    document.getElementById('blog-autor').value      = b.autor || '';
-    document.getElementById('blog-resumen').value    = b.resumen || '';
-    document.getElementById('blog-contenido1').value = b.contenido || '';
-    document.getElementById('blog-contenido2').value = b.contenido2 || '';
-    document.getElementById('blog-contenido3').value = b.contenido3 || '';
-    document.getElementById('blog-img-medio-caption').value = b.imagen_medio_caption || '';
-    document.getElementById('blog-img-final-caption').value = b.imagen_final_caption || '';
-    if (b.imagen_portada) { document.getElementById('prev-portada').src = b.imagen_portada; document.getElementById('prev-portada').classList.add('visible'); }
-    if (b.imagen_medio)   { document.getElementById('prev-medio').src   = b.imagen_medio;   document.getElementById('prev-medio').classList.add('visible'); }
-    if (b.imagen_final)   { document.getElementById('prev-final').src   = b.imagen_final;   document.getElementById('prev-final').classList.add('visible'); }
-    document.getElementById('blog-form-titulo').textContent = '✏️ Editando artículo';
-    document.getElementById('btn-guardar-blog').textContent = 'Guardar cambios';
-    document.getElementById('btn-cancelar-blog').style.display = 'inline-flex';
-    document.querySelector('[data-tab="blogs"]').click();
-    window.scrollTo(0, 0);
-  };
-
-  document.getElementById('btn-cancelar-blog').addEventListener('click', limpiarFormBlog);
-
-  window.eliminarBlog = async function(id, btn) {
-    if (!confirm('¿Eliminar este artículo?')) return;
-    await db.deleteBlog(id);
-    btn.closest('tr').remove();
-    showToast('Artículo eliminado.');
-    cargarResumen();
-  };
-
-  // ── CURSOS ──
-  async function cargarCursosTabla() {
-    const tbody = document.getElementById('cursos-tabla');
-    try {
-      const cursos = await db.getCursos();
-      if (cursos.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="table-empty">No hay cursos registrados.</td></tr>'; return; }
-      tbody.innerHTML = '';
-      cursos.forEach(c => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${c.titulo}</strong></td>
-          <td>${c.modalidad || '—'}</td>
-          <td>Bs. ${c.precio || '0'}</td>
-          <td>${c.duracion || '—'}</td>
-          <td style="display:flex;gap:0.5rem;">
-            <button class="btn-sm btn-edit" onclick="editarCurso('${c.id}')">Editar</button>
-            <button class="btn-sm btn-danger" onclick="eliminarCurso('${c.id}', this)">Eliminar</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    } catch(e) { tbody.innerHTML = '<tr><td colspan="5" class="table-empty">Error al cargar.</td></tr>'; }
-  }
-
-  document.getElementById('btn-guardar-curso').addEventListener('click', async () => {
-    const titulo = document.getElementById('curso-titulo').value.trim();
-    const desc   = document.getElementById('curso-descripcion').value.trim();
-    if (!titulo || !desc) { showToast('Título y descripción son obligatorios.', 'error'); return; }
-    const btn = document.getElementById('btn-guardar-curso');
-    btn.disabled = true; btn.textContent = 'Guardando...';
-    try {
-      const editId = document.getElementById('curso-edit-id').value;
-      const datos  = {
-        titulo,
-        modalidad:   document.getElementById('curso-modalidad').value,
-        precio:      document.getElementById('curso-precio').value,
-        duracion:    document.getElementById('curso-duracion').value.trim(),
-        descripcion: desc,
-      };
-      if (editId) { await db.updateCurso(editId, datos); showToast('Curso actualizado.'); }
-      else        { await db.addCurso(datos);            showToast('Curso guardado.');    }
-      limpiarFormCurso();
-      cargarCursosTabla();
-      cargarResumen();
-    } catch(e) { showToast('Error: ' + e.message, 'error'); }
-    btn.disabled = false; btn.textContent = 'Guardar curso';
-  });
-
-  function limpiarFormCurso() {
-    ['curso-titulo','curso-precio','curso-duracion','curso-descripcion'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('curso-edit-id').value = '';
-    document.getElementById('curso-form-titulo').textContent = '➕ Nuevo curso';
-    document.getElementById('btn-guardar-curso').textContent = 'Guardar curso';
-    document.getElementById('btn-cancelar-curso').style.display = 'none';
-  }
-
-  window.editarCurso = async function(id) {
-    const cursos = await db.getCursos();
-    const c = cursos.find(x => x.id === id);
-    if (!c) return;
-    document.getElementById('curso-edit-id').value     = id;
-    document.getElementById('curso-titulo').value      = c.titulo || '';
-    document.getElementById('curso-modalidad').value   = c.modalidad || 'Presencial';
-    document.getElementById('curso-precio').value      = c.precio || '';
-    document.getElementById('curso-duracion').value    = c.duracion || '';
-    document.getElementById('curso-descripcion').value = c.descripcion || '';
-    document.getElementById('curso-form-titulo').textContent = '✏️ Editando curso';
-    document.getElementById('btn-guardar-curso').textContent = 'Guardar cambios';
-    document.getElementById('btn-cancelar-curso').style.display = 'inline-flex';
-    document.querySelector('[data-tab="cursos"]').click();
-    window.scrollTo(0, 0);
-  };
-
-  document.getElementById('btn-cancelar-curso').addEventListener('click', limpiarFormCurso);
-
-  window.eliminarCurso = async function(id, btn) {
-    if (!confirm('¿Eliminar este curso?')) return;
-    await db.deleteCurso(id);
-    btn.closest('tr').remove();
-    showToast('Curso eliminado.');
-    cargarResumen();
-  };
-
-  // ── REDES ──
-  async function cargarRedes() {
-    try {
-      const r = await db.getRedes();
-      if (!r) return;
-      if (r.whatsapp)  document.getElementById('red-whatsapp').value  = r.whatsapp;
-      if (r.facebook)  document.getElementById('red-facebook').value  = r.facebook;
-      if (r.instagram) document.getElementById('red-instagram').value = r.instagram;
-      if (r.tiktok)    document.getElementById('red-tiktok').value    = r.tiktok;
-    } catch(e) {}
-  }
-
-  document.getElementById('btn-guardar-redes').addEventListener('click', async () => {
-    const datos = {
-      whatsapp:  document.getElementById('red-whatsapp').value.trim(),
-      facebook:  document.getElementById('red-facebook').value.trim(),
-      instagram: document.getElementById('red-instagram').value.trim(),
-      tiktok:    document.getElementById('red-tiktok').value.trim(),
-    };
-    try {
-      await db.saveRedes(datos);
-      showToast('Redes sociales guardadas.');
-    } catch(e) { showToast('Error al guardar redes.', 'error'); }
-  });
-
-  // ── PERFIL ──
-  async function cargarFotoPerfil() {
+  async function cargarFoto() {
     try {
       const perfil = await db.getPerfil();
       if (perfil && perfil.foto) {
-        document.getElementById('foto-placeholder-admin').style.display = 'none';
-        const img = document.getElementById('foto-preview-actual');
-        img.src = perfil.foto; img.style.display = 'block';
-        document.getElementById('btn-eliminar-foto').style.display = 'inline-flex';
+        document.getElementById('foto-placeholder').style.display = 'none';
+        const img = document.getElementById('foto-franklin');
+        img.src = perfil.foto;
+        img.style.display = 'block';
       }
     } catch(e) {}
   }
 
-  document.getElementById('input-foto-perfil').addEventListener('change', e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const prev = document.getElementById('foto-preview-nueva');
-    prev.src = URL.createObjectURL(file);
-    prev.classList.add('visible');
-  });
-
-  document.getElementById('btn-guardar-foto').addEventListener('click', async () => {
-    const file = document.getElementById('input-foto-perfil').files[0];
-    if (!file) { showToast('Seleccione una foto primero.', 'error'); return; }
-    const btn = document.getElementById('btn-guardar-foto');
-    btn.disabled = true; btn.textContent = 'Subiendo...';
+  async function cargarBlog() {
+    const cont = document.getElementById('blog-container');
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', 'consultora');
-      formData.append('folder', 'ayllon-tributaria/perfil');
-      const res  = await fetch('https://api.cloudinary.com/v1_1/dhz8whvie/image/upload', { method: 'POST', body: formData });
-      const data = await res.json();
-      await db.savePerfil(data.secure_url);
-      document.getElementById('foto-placeholder-admin').style.display = 'none';
-      const img = document.getElementById('foto-preview-actual');
-      img.src = data.secure_url; img.style.display = 'block';
-      document.getElementById('btn-eliminar-foto').style.display = 'inline-flex';
-      showToast('Foto guardada correctamente.');
-    } catch(e) { showToast('Error al subir la foto.', 'error'); }
-    btn.disabled = false; btn.textContent = 'Guardar foto';
-  });
+      const todos = await db.getBlogs();
+      if (todos.length === 0) {
+        cont.innerHTML = `<div class="blog-prev-card"><div class="blog-prev-img">📰</div><div class="blog-prev-body"><p class="blog-prev-cat">Próximamente</p><h3>Artículos en camino</h3><p>Pronto Franklin compartirá contenido sobre tributación boliviana.</p></div></div>`;
+        return;
+      }
+      const mezclados = todos.sort(() => Math.random() - 0.5).slice(0, 3);
+      cont.innerHTML = mezclados.map(b => `
+        <div class="blog-prev-card animate-up" onclick="location.href='blog.html?id=${b.id}'">
+          <div class="blog-prev-img">
+            ${b.imagen_portada ? `<img src="${b.imagen_portada}" alt="${b.titulo}">` : '📰'}
+          </div>
+          <div class="blog-prev-body">
+            <p class="blog-prev-cat">${b.categoria || 'Tributación'}</p>
+            <h3>${b.titulo}</h3>
+            <p>${b.resumen || ''}</p>
+            <span class="blog-prev-leer">Leer artículo →</span>
+          </div>
+        </div>
+      `).join('');
+    } catch(e) {
+      cont.innerHTML = `<div class="blog-prev-card"><div class="blog-prev-img">📰</div><div class="blog-prev-body"><p class="blog-prev-cat">Error</p><h3>No se pudieron cargar los artículos</h3></div></div>`;
+    }
+  }
 
-  document.getElementById('btn-eliminar-foto').addEventListener('click', async () => {
-    if (!confirm('¿Eliminar la foto de perfil?')) return;
+  async function cargarClases() {
+    const cont = document.getElementById('clases-container');
     try {
-      await db.savePerfil(null);
-      document.getElementById('foto-preview-actual').style.display = 'none';
-      document.getElementById('foto-placeholder-admin').style.display = 'flex';
-      document.getElementById('btn-eliminar-foto').style.display = 'none';
-      showToast('Foto eliminada.');
-    } catch(e) { showToast('Error al eliminar.', 'error'); }
-  });
+      const cursos = await db.getCursos();
+      if (cursos.length === 0) {
+        cont.innerHTML = `<div class="clase-card"><div class="clase-ico">🎓</div><div class="clase-info"><h3>Clases próximamente</h3><p>Franklin está preparando el contenido. Escríbenos para más información.</p></div></div>`;
+        return;
+      }
+      cont.innerHTML = cursos.slice(0, 4).map(c => `
+        <div class="clase-card animate-up">
+          <div class="clase-ico">🎓</div>
+          <div class="clase-info">
+            <h3>${c.titulo} <span class="clase-estado estado-${c.estado || 'activo'}">${c.estado === 'solicitar' ? 'Solicitar' : 'Disponible'}</span></h3>
+            <p>${c.descripcion || ''}</p>
+            <span class="clase-precio">Bs. ${c.precio || '0'}</span>
+          </div>
+        </div>
+      `).join('');
+    } catch(e) {
+      cont.innerHTML = `<div class="clase-card"><div class="clase-ico">🎓</div><div class="clase-info"><h3>Error al cargar clases</h3></div></div>`;
+    }
+  }
 
+  cargarFoto();
+  cargarBlog();
+  cargarClases();
 </script>
 
   <script>
