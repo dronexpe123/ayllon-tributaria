@@ -500,6 +500,7 @@
     try {
       const ok = auth.login(email, pass);
       if (!ok) throw new Error('Credenciales incorrectas');
+      mostrarPanel();
     } catch (e) {
       err.style.display = 'block';
       btn.disabled = false; btn.textContent = 'Ingresar →';
