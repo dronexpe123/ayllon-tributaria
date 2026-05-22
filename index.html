@@ -564,10 +564,14 @@
     }
   }
 
-  cargarFoto();
-  await cargarBlog();
-  await cargarClases();
-  document.querySelectorAll('.animate-up').forEach(el => observer.observe(el));
+  (async () => {
+    cargarFoto();
+    await cargarBlog();
+    await cargarClases();
+    document.querySelectorAll('.animate-up').forEach(el => {
+      el.classList.add('visible');
+    });
+  })();
 </script>
 
   <script>
