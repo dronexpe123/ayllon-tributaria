@@ -565,8 +565,9 @@
   }
 
   cargarFoto();
-  cargarBlog();
-  cargarClases();
+  await cargarBlog();
+  await cargarClases();
+  document.querySelectorAll('.animate-up').forEach(el => observer.observe(el));
 </script>
 
   <script>
