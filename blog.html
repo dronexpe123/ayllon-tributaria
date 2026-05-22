@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog | Ayllón Tributaria</title>
+  <meta name="description" content="Artículos y recursos sobre tributación, contabilidad y finanzas en Bolivia.">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* LISTA DE BLOGS */
+    .blog-layout { max-width: 1200px; margin: 0 auto; padding: 60px 2rem; }
+    .blog-filtros {
+      display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2.5rem;
+    }
+    .filtro-btn {
+      padding: 6px 18px; border-radius: 999px; border: 1px solid rgba(201,168,76,0.3);
+      background: transparent; color: var(--text-mid); font-size: 0.85rem;
+      font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s;
+    }
+    .filtro-btn:hover, .filtro-btn.active {
+      background: var(--gold); color: var(--navy);
+      border-color: var(--gold); font-weight: 600;
+    }
+    .blogs-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+    .blog-card {
+      background: var(--white); border-radius: var(--radius-lg); overflow: hidden;
+      border: 1px solid rgba(201,168,76,0.1); transition: transform 0.3s, box-shadow 0.3s;
+      text-decoration: none; display: block; cursor: pointer;
+    }
+    .blog-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-gold); }
+    .blog-card-img {
+      width: 100%; height: 200px; background: var(--navy-mid);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-light); font-size: 0.85rem; overflow: hidden;
+    }
+    .blog-card-img img { width: 100%; height: 100%; object-fit: cover; }
+    .blog-card-body { padding: 1.5rem; }
+    .blog-card-cat { font-size: 0.72rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+    .blog-card-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; color: var(--navy); line-height: 1.35; margin-bottom: 0.75rem; }
+    .blog-card-excerpt { font-size: 0.88rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 1rem; }
+    .blog-card-footer { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-light); }
+    .blog-empty { grid-column: 1/-1; text-align: center; padding: 4rem; color: var(--text-light); }
+
+    /* ARTICULO INDIVIDUAL */
+    .articulo-wrap { display: none; }
+    .articulo-wrap.visible { display: block; }
+    .lista-wrap { display: block; }
+    .lista-wrap.hidden { display: none; }
+
+    .articulo-hero {
+      background: var(--navy); padding: 120px 2rem 60px;
+      position: relative; overflow: hidden;
+    }
+    .articulo-hero::before {
+      content: ''; position: absolute; top: -50%; left: -20%; width: 60%; height: 200%;
+      background: radial-gradient(ellipse, rgba(201,168,76,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .articulo-hero-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+    .articulo-back {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--gold); text-decoration: none; font-size: 0.88rem;
+      margin-bottom: 1.5rem; transition: gap 0.2s;
+    }
+    .articulo-back:hover { gap: 10px; }
+    .articulo-cat { font-size: 0.72rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+    .articulo-titulo {
+      font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 900; color: var(--white); line-height: 1.2; margin-bottom: 1rem;
+    }
+    .articulo-meta { display: flex; gap: 1.5rem; color: var(--text-light); font-size: 0.85rem; flex-wrap: wrap; }
+
+    .articulo-portada {
+      width: 100%; max-height: 480px; object-fit: cover;
+      display: block;
+    }
+
+    .articulo-body { max-width: 800px; margin: 0 auto; padding: 3rem 2rem; }
+    .articulo-content { font-size: 1.05rem; line-height: 1.9; color: var(--text-mid); }
+    .articulo-content h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--navy); margin: 2.5rem 0 1rem; }
+    .articulo-content h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--navy); margin: 2rem 0 0.75rem; }
+    .articulo-content p { margin-bottom: 1.25rem; }
+    .articulo-content ul, .articulo-content ol { margin: 1rem 0 1.25rem 1.5rem; }
+    .articulo-content li { margin-bottom: 0.5rem; }
+    .articulo-content strong { color: var(--navy); font-weight: 600; }
+    .articulo-content blockquote {
+      border-left: 4px solid var(--gold); padding: 1rem 1.5rem;
+      background: var(--gold-pale); border-radius: 0 var(--radius) var(--radius) 0;
+      margin: 1.5rem 0; font-style: italic; color: var(--navy);
+    }
+
+    /* IMAGEN DENTRO DEL ARTICULO */
+    .articulo-img-block { margin: 2rem 0; border-radius: var(--radius-lg); overflow: hidden; }
+    .articulo-img-block img { width: 100%; display: block; max-height: 400px; object-fit: cover; }
+    .articulo-img-caption { text-align: center; font-size: 0.82rem; color: var(--text-light); padding: 0.5rem; background: var(--cream); }
+
+    @media (max-width: 768px) {
+      .blogs-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <img src="img/logo.png" alt="" aria-hidden="true" class="logo-watermark">
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <img src="img/logo.png" alt="Ayllón Tributaria" style="height:38px; width:auto; object-fit:contain;">
+      <div class="nav-logo-text">
+        Ayllón
+        <span class="nav-logo-sub">Tributaria</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="servicios.html">Servicios</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="contacto.html" class="nav-cta">Contacto</a></li>
+    </ul>
+    <button class="nav-hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- VISTA: LISTA DE BLOGS -->
+  <div class="lista-wrap" id="lista-wrap">
+    <div class="page-hero" style="position:relative; overflow:hidden;">
+      <img src="img/logo.png" alt="" aria-hidden="true" style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:420px; opacity:0.07; pointer-events:none; user-select:none;">
+      <h1>Blog & <span>Recursos</span></h1>
+      <p>Artículos sobre tributación, contabilidad y finanzas para personas y empresas en Bolivia.</p>
+    </div>
+    <div class="blog-layout">
+      <div class="blog-filtros" id="filtros">
+        <button class="filtro-btn active" data-cat="todos">Todos</button>
+        <button class="filtro-btn" data-cat="Tributación">Tributación</button>
+        <button class="filtro-btn" data-cat="Contabilidad">Contabilidad</button>
+        <button class="filtro-btn" data-cat="Auditoría">Auditoría</button>
+        <button class="filtro-btn" data-cat="Finanzas">Finanzas</button>
+      </div>
+      <div class="blogs-grid" id="blogs-grid">
+        <div class="blog-empty">Cargando artículos...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VISTA: ARTICULO INDIVIDUAL -->
+  <div class="articulo-wrap" id="articulo-wrap">
+    <div class="articulo-hero">
+      <div class="articulo-hero-inner">
+        <a href="#" class="articulo-back" id="btn-volver">← Volver al blog</a>
+        <p class="articulo-cat" id="art-cat"></p>
+        <h1 class="articulo-titulo" id="art-titulo"></h1>
+        <div class="articulo-meta">
+          <span id="art-fecha"></span>
+          <span id="art-autor"></span>
+        </div>
+      </div>
+    </div>
+    <img class="articulo-portada" id="art-portada" src="" alt="" style="display:none">
+    <div class="articulo-body">
+      <div class="articulo-content" id="art-content"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer style="position:relative; overflow:hidden;">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <img src="img/logo.png" alt="Ayllón Tributaria" style="height:38px; width:auto; object-fit:contain;">
+          <div class="nav-logo-text" style="color:var(--white)">Ayllón<span class="nav-logo-sub">Tributaria</span></div>
+        </a>
+        <p>Asesoría contable, tributaria y de auditoría en La Paz, Bolivia.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Categorías</h4>
+        <ul>
+          <li><a href="blog.html">Tributación</a></li>
+          <li><a href="blog.html">Contabilidad</a></li>
+          <li><a href="blog.html">Auditoría</a></li>
+          <li><a href="blog.html">Finanzas</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 <span>Ayllón Tributaria</span>. Todos los derechos reservados.</p>
+      <p>La Paz, Bolivia</p>
+    </div>
+  </footer>
+
+  <script type="module">
+  import { db, formatDate } from './js/main.js';
+
+  let todosBlogs = [];
+
+  // CARGAR TODOS LOS BLOGS
+  async function cargarBlogs() {
+    const grid = document.getElementById('blogs-grid');
+    try {
+      todosBlogs = await db.getBlogs();
+      renderBlogs(todosBlogs);
+    } catch (e) {
+      grid.innerHTML = '<div class="blog-empty">Error al cargar artículos.</div>';
+    }
+  }
+
+  function renderBlogs(lista) {
+    const grid = document.getElementById('blogs-grid');
+    if (lista.length === 0) {
+      grid.innerHTML = '<div class="blog-empty">No hay artículos en esta categoría aún.</div>';
+      return;
+    }
+    grid.innerHTML = lista.map(b => `
+      <div class="blog-card animate-up" onclick="abrirArticulo('${b.id}')">
+        <div class="blog-card-img">
+          ${b.imagen_portada ? `<img src="${b.imagen_portada}" alt="${b.titulo}" loading="lazy">` : '📄'}
+        </div>
+        <div class="blog-card-body">
+          <p class="blog-card-cat">${b.categoria || 'Tributación'}</p>
+          <h3 class="blog-card-title">${b.titulo}</h3>
+          <p class="blog-card-excerpt">${b.resumen || ''}</p>
+          <div class="blog-card-footer">
+            <span>${formatDate(b.fecha)}</span>
+            <span style="color:var(--gold)">Leer →</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // FILTROS
+  document.getElementById('filtros').addEventListener('click', e => {
+    const btn = e.target.closest('.filtro-btn');
+    if (!btn) return;
+    document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const cat = btn.dataset.cat;
+    const filtrados = cat === 'todos' ? todosBlogs : todosBlogs.filter(b => b.categoria === cat);
+    renderBlogs(filtrados);
+  });
+
+  // ABRIR ARTICULO
+  window.abrirArticulo = async function(id) {
+    try {
+      const b = await db.getBlog(id);
+      if (!b) return;
+
+      document.getElementById('art-cat').textContent    = b.categoria || 'Tributación';
+      document.getElementById('art-titulo').textContent = b.titulo;
+      document.getElementById('art-fecha').textContent  = formatDate(b.fecha);
+      document.getElementById('art-autor').textContent  = b.autor ? `Por ${b.autor}` : '';
+
+      const portada = document.getElementById('art-portada');
+      if (b.imagen_portada) {
+        portada.src = b.imagen_portada;
+        portada.alt = b.titulo;
+        portada.style.display = 'block';
+      } else {
+        portada.style.display = 'none';
+      }
+
+      let html = '';
+      if (b.contenido)  html += `<div>${b.contenido}</div>`;
+      if (b.imagen_medio) {
+        html += `<div class="articulo-img-block">
+          <img src="${b.imagen_medio}" alt="Imagen del artículo">
+          <p class="articulo-img-caption">${b.imagen_medio_caption || ''}</p>
+        </div>`;
+      }
+      if (b.contenido2) html += `<div>${b.contenido2}</div>`;
+      if (b.imagen_final) {
+        html += `<div class="articulo-img-block">
+          <img src="${b.imagen_final}" alt="Imagen final">
+          <p class="articulo-img-caption">${b.imagen_final_caption || ''}</p>
+        </div>`;
+      }
+      if (b.contenido3) html += `<div>${b.contenido3}</div>`;
+
+      document.getElementById('art-content').innerHTML = html;
+
+      document.getElementById('lista-wrap').classList.add('hidden');
+      document.getElementById('articulo-wrap').classList.add('visible');
+      window.scrollTo(0, 0);
+      history.pushState({ id }, '', `blog.html?id=${id}`);
+
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // VOLVER AL LISTADO
+  document.getElementById('btn-volver').addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('articulo-wrap').classList.remove('visible');
+    document.getElementById('lista-wrap').classList.remove('hidden');
+    history.pushState({}, '', 'blog.html');
+    window.scrollTo(0, 0);
+  });
+
+  // SI VIENE CON ?id= EN LA URL
+  const params = new URLSearchParams(window.location.search);
+  const idParam = params.get('id');
+  if (idParam) abrirArticulo(idParam);
+
+  cargarBlogs();
+</script>
+
+</body>
+</html>

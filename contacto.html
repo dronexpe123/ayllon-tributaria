@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacto | Ayllón Tributaria</title>
+  <meta name="description" content="Contáctenos para asesoría contable, tributaria y de auditoría en La Paz, Bolivia.">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .contacto-layout {
+      max-width: 1200px; margin: 0 auto;
+      padding: 60px 2rem;
+      display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: start;
+    }
+    /* INFO */
+    .contacto-info h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--navy); margin-bottom: 1rem; }
+    .contacto-info p { color: var(--text-mid); line-height: 1.8; margin-bottom: 2rem; }
+    .contacto-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1.25rem; border-radius: var(--radius);
+      background: var(--white); border: 1px solid rgba(201,168,76,0.12);
+      box-shadow: var(--shadow); margin-bottom: 1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .contacto-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-gold); }
+    .contacto-item-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+    .contacto-item-text h4 { font-weight: 600; color: var(--navy); font-size: 0.9rem; margin-bottom: 3px; }
+    .contacto-item-text a, .contacto-item-text p { color: var(--text-mid); font-size: 0.88rem; text-decoration: none; transition: color 0.2s; }
+    .contacto-item-text a:hover { color: var(--gold); }
+
+    /* REDES SOCIALES */
+    .redes-titulo { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--navy); margin: 2rem 0 1rem; font-weight: 700; }
+    .redes-grid { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .red-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 18px; border-radius: 8px; text-decoration: none;
+      font-size: 0.88rem; font-weight: 600; transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+    .red-facebook { background: #1877f2; color: white; }
+    .red-facebook:hover { background: #1464d3; transform: translateY(-2px); }
+    .red-instagram { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; }
+    .red-instagram:hover { opacity: 0.9; transform: translateY(-2px); }
+    .red-tiktok { background: #000; color: white; }
+    .red-tiktok:hover { background: #111; transform: translateY(-2px); }
+    .red-whatsapp { background: #25d366; color: white; }
+    .red-whatsapp:hover { background: #1da851; transform: translateY(-2px); }
+
+    /* FORMULARIO */
+    .contacto-form-wrap {
+      background: var(--white); border-radius: var(--radius-lg);
+      padding: 2.5rem; box-shadow: var(--shadow);
+      border: 1px solid rgba(201,168,76,0.1);
+    }
+    .contacto-form-wrap h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--navy); margin-bottom: 0.5rem; }
+    .contacto-form-wrap p { color: var(--text-mid); font-size: 0.88rem; margin-bottom: 1.75rem; }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--navy); margin-bottom: 0.4rem; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 11px 14px;
+      border: 1.5px solid rgba(201,168,76,0.2); border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif; font-size: 0.92rem; color: var(--text-dark);
+      background: var(--cream); transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+    }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .btn-submit {
+      width: 100%; padding: 14px; background: var(--gold); color: var(--navy);
+      border: none; border-radius: var(--radius); font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; font-weight: 700; cursor: pointer;
+      transition: all 0.25s; margin-top: 0.5rem;
+    }
+    .btn-submit:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: var(--shadow-gold); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .form-success {
+      display: none; text-align: center; padding: 2rem;
+      color: var(--navy);
+    }
+    .form-success .check { font-size: 3rem; margin-bottom: 1rem; }
+    .form-success h4 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .form-success p { color: var(--text-mid); font-size: 0.9rem; }
+
+    @media (max-width: 768px) {
+      .contacto-layout { grid-template-columns: 1fr; gap: 2rem; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <img src="img/logo.png" alt="" aria-hidden="true" class="logo-watermark">
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <img src="img/logo.png" alt="Ayllón Tributaria" style="height:38px; width:auto; object-fit:contain;">
+      <div class="nav-logo-text">
+        Ayllón
+        <span class="nav-logo-sub">Tributaria</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="servicios.html">Servicios</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="contacto.html" class="nav-cta">Contacto</a></li>
+    </ul>
+    <button class="nav-hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <div class="page-hero" style="position:relative; overflow:hidden;">
+    <img src="img/logo.png" alt="" aria-hidden="true" style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:420px; opacity:0.07; pointer-events:none; user-select:none;">
+    <h1>Hablemos <span>hoy</span></h1>
+    <p>Primera consulta gratuita. Sin compromiso. Respondemos en menos de 24 horas.</p>
+  </div>
+
+  <div class="contacto-layout">
+
+    <!-- INFO DE CONTACTO -->
+    <div class="contacto-info animate-up">
+      <h2>Información de contacto</h2>
+      <p>Estamos disponibles para atenderle de lunes a viernes. También puede escribirnos por WhatsApp o redes sociales.</p>
+
+      <div class="contacto-item">
+        <div class="contacto-item-icon">📱</div>
+        <div class="contacto-item-text">
+          <h4>WhatsApp / Teléfono</h4>
+          <a href="https://wa.me/59170000000" target="_blank" id="link-whatsapp">+591 7000-0000</a>
+        </div>
+      </div>
+
+      <div class="contacto-item">
+        <div class="contacto-item-icon">📧</div>
+        <div class="contacto-item-text">
+          <h4>Correo electrónico</h4>
+          <a href="mailto:ayllon.consulting@gmail.com">ayllon.consulting@gmail.com</a>
+        </div>
+      </div>
+
+      <div class="contacto-item">
+        <div class="contacto-item-icon">📍</div>
+        <div class="contacto-item-text">
+          <h4>Ubicación</h4>
+          <p>La Paz, Bolivia</p>
+        </div>
+      </div>
+
+      <div class="contacto-item">
+        <div class="contacto-item-icon">🕐</div>
+        <div class="contacto-item-text">
+          <h4>Horario de atención</h4>
+          <p>Lunes a Viernes: 8:00 – 18:00<br>Sábados: 9:00 – 13:00</p>
+        </div>
+      </div>
+
+      <h3 class="redes-titulo">Síguenos en redes sociales</h3>
+      <div class="redes-grid" id="redes-container">
+        <a href="#" class="red-btn red-whatsapp" id="btn-whatsapp" target="_blank">💬 WhatsApp</a>
+        <a href="#" class="red-btn red-facebook" id="btn-facebook" target="_blank">📘 Facebook</a>
+        <a href="#" class="red-btn red-instagram" id="btn-instagram" target="_blank">📸 Instagram</a>
+        <a href="#" class="red-btn red-tiktok" id="btn-tiktok" target="_blank">🎵 TikTok</a>
+      </div>
+    </div>
+
+    <!-- FORMULARIO -->
+    <div class="contacto-form-wrap animate-up">
+      <h3>Envíenos un mensaje</h3>
+      <p>Complete el formulario y le responderemos a la brevedad.</p>
+
+      <div id="form-content">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombre">Nombre completo *</label>
+            <input type="text" id="nombre" placeholder="Juan Pérez" required>
+          </div>
+          <div class="form-group">
+            <label for="telefono">Teléfono</label>
+            <input type="tel" id="telefono" placeholder="+591 7000-0000">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Correo electrónico *</label>
+          <input type="email" id="email" placeholder="juan@ejemplo.com" required>
+        </div>
+        <div class="form-group">
+          <label for="servicio">Servicio de interés</label>
+          <select id="servicio">
+            <option value="">Seleccione un servicio</option>
+            <option>Tributación — Declaraciones</option>
+            <option>Tributación — Asesoría empresarial</option>
+            <option>Tributación — Fiscalización y deudas</option>
+            <option>Contabilidad general</option>
+            <option>Nóminas y planillas</option>
+            <option>Auditoría financiera</option>
+            <option>Auditoría tributaria</option>
+            <option>Cursos</option>
+            <option>Consulta general</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="mensaje">Mensaje *</label>
+          <textarea id="mensaje" placeholder="Cuéntenos brevemente en qué podemos ayudarle..." required></textarea>
+        </div>
+        <button class="btn-submit" id="btn-enviar">Enviar mensaje →</button>
+      </div>
+
+      <div class="form-success" id="form-success">
+        <div class="check">✅</div>
+        <h4>¡Mensaje enviado!</h4>
+        <p>Gracias por contactarnos. Le responderemos en menos de 24 horas.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer style="position:relative; overflow:hidden;">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <img src="img/logo.png" alt="Ayllón Tributaria" style="height:38px; width:auto; object-fit:contain;">
+          <div class="nav-logo-text" style="color:var(--white)">Ayllón<span class="nav-logo-sub">Tributaria</span></div>
+        </a>
+        <p>Asesoría contable, tributaria y de auditoría en La Paz, Bolivia.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="servicios.html">Tributación</a></li>
+          <li><a href="servicios.html">Contabilidad</a></li>
+          <li><a href="servicios.html">Auditoría</a></li>
+          <li><a href="servicios.html">Cursos</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 <span>Ayllón Tributaria</span>. Todos los derechos reservados.</p>
+      <p>La Paz, Bolivia</p>
+    </div>
+  </footer>
+
+  <script type="module">
+  import { db, showToast } from './js/main.js';
+
+  // CARGAR REDES SOCIALES
+  async function cargarRedes() {
+    try {
+      const r = await db.getRedes();
+      if (!r) return;
+      if (r.whatsapp) {
+        document.getElementById('btn-whatsapp').href = `https://wa.me/${r.whatsapp.replace(/\D/g,'')}`;
+        document.getElementById('link-whatsapp').href = `https://wa.me/${r.whatsapp.replace(/\D/g,'')}`;
+        document.getElementById('link-whatsapp').textContent = r.whatsapp;
+      }
+      if (r.facebook)  document.getElementById('btn-facebook').href  = r.facebook;
+      if (r.instagram) document.getElementById('btn-instagram').href = r.instagram;
+      if (r.tiktok)    document.getElementById('btn-tiktok').href    = r.tiktok;
+    } catch(e) { console.log('Redes no configuradas aún.'); }
+  }
+
+  // ENVIAR FORMULARIO
+  document.getElementById('btn-enviar').addEventListener('click', async () => {
+    const nombre  = document.getElementById('nombre').value.trim();
+    const email   = document.getElementById('email').value.trim();
+    const mensaje = document.getElementById('mensaje').value.trim();
+
+    if (!nombre || !email || !mensaje) {
+      showToast('Por favor complete los campos obligatorios.', 'error');
+      return;
+    }
+
+    const btn = document.getElementById('btn-enviar');
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    try {
+      await db.addMensaje({
+        nombre,
+        email,
+        telefono: document.getElementById('telefono').value.trim(),
+        servicio: document.getElementById('servicio').value,
+        mensaje,
+        leido: false
+      });
+
+      document.getElementById('form-content').style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+
+    } catch(e) {
+      showToast('Error al enviar. Intente nuevamente.', 'error');
+      btn.disabled = false;
+      btn.textContent = 'Enviar mensaje →';
+    }
+  });
+
+  cargarRedes();
+</script>
+
+</body>
+</html>

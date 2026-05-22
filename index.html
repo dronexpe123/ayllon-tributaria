@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ayllón Tributaria | Asesoría Contable y Tributaria en La Paz</title>
+  <meta name="description" content="Franklin Rolando Ayllón Pabón — Contador Tributarista y Auditor Certificado con más de 20 años de experiencia en Bolivia. Primera consulta gratuita.">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* HERO */
+    .hero {
+      min-height: 100vh; background: var(--navy);
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      padding: 100px 2rem 60px;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 50%, rgba(201,168,76,0.07) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(201,168,76,0.05) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    .hero-grid-lines {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+      background-size: 60px 60px; pointer-events: none;
+    }
+    .hero-inner {
+      max-width: 1200px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1fr 380px;
+      gap: 4rem; align-items: center; position: relative; z-index: 2;
+    }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem;
+      animation: fadeIn 0.6s ease both;
+    }
+    .hero-eyebrow-line { width: 36px; height: 2px; background: var(--gold); }
+    .hero-eyebrow-txt { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 900; color: var(--white); line-height: 1.1;
+      margin-bottom: 1.5rem; animation: fadeUp 0.7s ease 0.1s both;
+    }
+    .hero-title em {
+      font-style: italic;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+      background-size: 200% auto;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      animation: shimmer 3s linear infinite;
+    }
+    .hero-desc {
+      font-size: 1.05rem; color: rgba(255,255,255,0.65);
+      line-height: 1.8; margin-bottom: 2.5rem; max-width: 500px;
+      animation: fadeUp 0.7s ease 0.2s both;
+    }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 3rem; animation: fadeUp 0.7s ease 0.3s both; }
+    .hero-stats {
+      display: flex; gap: 2.5rem;
+      padding-top: 2rem; border-top: 1px solid rgba(201,168,76,0.2);
+      animation: fadeUp 0.7s ease 0.4s both;
+    }
+    .hero-stat-n { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--gold); line-height: 1; }
+    .hero-stat-l { font-size: 0.75rem; color: var(--text-light); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* TARJETA LATERAL */
+    .hero-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.2);
+      border-radius: var(--radius-lg); padding: 2rem;
+      backdrop-filter: blur(10px); animation: fadeIn 1s ease 0.3s both;
+    }
+    .hero-card-avatar {
+      width: 64px; height: 64px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 900;
+      color: var(--navy); margin-bottom: 1rem;
+    }
+    .hero-card-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 2px; }
+    .hero-card-role { font-size: 0.78rem; color: var(--text-light); margin-bottom: 1.5rem; }
+    .hero-card-items { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; }
+    .hero-card-item {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+      background: rgba(255,255,255,0.04); border-radius: var(--radius);
+      font-size: 0.82rem; color: rgba(255,255,255,0.7);
+      border: 1px solid rgba(201,168,76,0.1);
+    }
+    .hero-card-wa {
+      display: block; text-align: center;
+      background: #25d366; color: white;
+      padding: 12px; border-radius: var(--radius);
+      font-weight: 600; font-size: 0.88rem; text-decoration: none;
+      transition: filter 0.2s;
+    }
+    .hero-card-wa:hover { filter: brightness(1.1); }
+
+    /* SOBRE FRANKLIN */
+    .franklin-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center;
+    }
+    .franklin-foto-wrap { position: relative; }
+    .franklin-placeholder {
+      width: 100%; aspect-ratio: 4/5;
+      background: var(--navy-mid); border: 2px dashed rgba(201,168,76,0.3);
+      border-radius: var(--radius-xl, 24px);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 12px; color: var(--text-light); font-size: 0.88rem;
+    }
+    .franklin-placeholder span { font-size: 3rem; }
+    .franklin-foto { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 24px; display: none; }
+    .franklin-exp-badge {
+      position: absolute; bottom: 20px; left: -20px;
+      background: var(--gold); color: var(--navy);
+      padding: 14px 20px; border-radius: var(--radius-lg); text-align: center;
+    }
+    .franklin-exp-n { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; line-height: 1; }
+    .franklin-exp-l { font-size: 0.72rem; margin-top: 2px; opacity: 0.85; }
+    .franklin-texto p { color: var(--text-mid); line-height: 1.85; margin-bottom: 1rem; font-size: 0.97rem; }
+    .franklin-mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 1.5rem 0; }
+    .franklin-mini {
+      background: rgba(201,168,76,0.06); border-radius: var(--radius);
+      padding: 14px; font-size: 0.82rem; color: var(--text-mid);
+      border-left: 3px solid var(--gold);
+    }
+    .franklin-mini strong { display: block; color: var(--navy); font-size: 0.88rem; margin-bottom: 2px; }
+
+    /* SERVICIOS */
+    .srv-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem; margin-bottom: 2rem;
+    }
+    .srv-card {
+      background: var(--white); border: 1px solid rgba(201,168,76,0.1);
+      border-radius: var(--radius-lg); padding: 1.5rem;
+      transition: all 0.3s; position: relative; overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .srv-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 100%; height: 3px; background: var(--gold);
+      transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+    }
+    .srv-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-gold); }
+    .srv-card:hover::after { transform: scaleX(1); }
+    .srv-ico {
+      width: 44px; height: 44px; background: var(--gold-pale);
+      border-radius: var(--radius); display: flex; align-items: center;
+      justify-content: center; font-size: 1.2rem; margin-bottom: 1rem;
+    }
+    .srv-card h3 { font-family: 'Playfair Display', serif; font-size: 0.97rem; color: var(--navy); margin-bottom: 8px; }
+    .srv-card p { font-size: 0.84rem; color: var(--text-mid); line-height: 1.65; }
+
+    /* BLOG PREVIEW */
+    .blog-prev-section { background: rgba(201,168,76,0.03); }
+    .blog-prev-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem; margin-bottom: 2rem;
+    }
+    .blog-prev-card {
+      background: var(--white); border: 1px solid rgba(201,168,76,0.1);
+      border-radius: var(--radius-lg); overflow: hidden;
+      transition: all 0.3s; cursor: pointer; display: flex; flex-direction: column;
+      box-shadow: var(--shadow);
+    }
+    .blog-prev-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-gold); }
+    .blog-prev-img {
+      height: 130px; background: var(--gold-pale);
+      display: flex; align-items: center; justify-content: center; font-size: 2.5rem;
+    }
+    .blog-prev-img img { width: 100%; height: 100%; object-fit: cover; }
+    .blog-prev-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
+    .blog-prev-cat { font-size: 0.72rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+    .blog-prev-body h3 { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--navy); margin-bottom: 8px; line-height: 1.4; }
+    .blog-prev-body p { font-size: 0.83rem; color: var(--text-mid); line-height: 1.6; flex: 1; }
+    .blog-prev-leer { font-size: 0.8rem; color: var(--gold); font-weight: 600; margin-top: 1rem; }
+
+    /* CLASES */
+    .clases-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem; margin-bottom: 2rem;
+    }
+    .clase-card {
+      background: var(--white); border: 1px solid rgba(201,168,76,0.1);
+      border-radius: var(--radius-lg); padding: 1.5rem;
+      display: flex; gap: 1rem; align-items: flex-start;
+      transition: all 0.3s; box-shadow: var(--shadow);
+    }
+    .clase-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-gold); }
+    .clase-ico {
+      width: 44px; height: 44px; flex-shrink: 0;
+      background: var(--gold-pale); border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+    }
+    .clase-info h3 { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--navy); margin-bottom: 4px; }
+    .clase-info p { font-size: 0.82rem; color: var(--text-mid); line-height: 1.5; margin-bottom: 10px; }
+    .clase-precio { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--gold); font-weight: 700; }
+    .clase-estado {
+      display: inline-block; font-size: 0.7rem; padding: 2px 8px;
+      border-radius: 999px; margin-left: 8px; font-weight: 600;
+    }
+    .estado-activo { background: rgba(34,197,94,0.1); color: #16a34a; }
+    .estado-solicitar { background: rgba(234,179,8,0.1); color: #ca8a04; }
+
+    /* CONTACTO PREVIEW */
+    .contacto-prev-section { background: rgba(201,168,76,0.03); }
+    .contacto-prev-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 3rem; align-items: center;
+    }
+    .contacto-prev-cards { display: flex; flex-direction: column; gap: 12px; }
+    .contacto-prev-card {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--white); border: 1px solid rgba(201,168,76,0.1);
+      border-radius: var(--radius); padding: 1rem;
+      transition: border-color 0.2s; text-decoration: none;
+      box-shadow: var(--shadow);
+    }
+    .contacto-prev-card:hover { border-color: var(--gold); }
+    .contacto-prev-ico {
+      width: 40px; height: 40px; flex-shrink: 0;
+      background: var(--gold-pale); border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    }
+    .contacto-prev-lbl { font-size: 0.75rem; color: var(--text-light); }
+    .contacto-prev-val { font-size: 0.9rem; color: var(--navy); font-weight: 500; }
+
+    .wa-float {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: #25d366; color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; text-decoration: none;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .wa-float:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,0.5); }
+
+    .text-center { text-align: center; }
+
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-card { display: none; }
+      .franklin-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .franklin-exp-badge { left: 12px; }
+      .srv-grid { grid-template-columns: 1fr 1fr; }
+      .blog-prev-grid { grid-template-columns: 1fr 1fr; }
+      .contacto-prev-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .srv-grid { grid-template-columns: 1fr; }
+      .blog-prev-grid { grid-template-columns: 1fr; }
+      .clases-grid { grid-template-columns: 1fr; }
+      .franklin-mini-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <img src="img/logo.png" alt="" aria-hidden="true" class="logo-watermark">
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <img src="img/logo.png" alt="Ayllón Tributaria" style="height:38px; width:auto; object-fit:contain;">
+      <div class="nav-logo-text">
+        Ayllón
+        <span class="nav-logo-sub">Tributaria</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="servicios.html">Servicios</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="contacto.html" class="nav-cta">Contacto</a></li>
+    </ul>
+    <button class="nav-hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow">
+          <div class="hero-eyebrow-line"></div>
+          <span class="hero-eyebrow-txt">Contador Tributarista · Auditor Certificado</span>
+        </div>
+        <h1 class="hero-title">
+          Su contabilidad en<br>manos <em>expertas</em>
+        </h1>
+        <p class="hero-desc">
+          Más de 20 años resolviendo declaraciones, auditorías y situaciones tributarias complejas para emprendedores y empresas en Bolivia. Primera consulta completamente gratuita.
+        </p>
+        <div class="hero-actions">
+          <a href="https://wa.me/59168064859" class="btn btn-primary">💬 Consulta gratuita</a>
+          <a href="servicios.html" class="btn btn-outline">Ver servicios</a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="hero-stat-n">+20</div>
+            <div class="hero-stat-l">Años de experiencia</div>
+          </div>
+          <div>
+            <div class="hero-stat-n">+5</div>
+            <div class="hero-stat-l">Empresas atendidas</div>
+          </div>
+          <div>
+            <div class="hero-stat-n">100%</div>
+            <div class="hero-stat-l">Consulta gratuita</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TARJETA FRANKLIN -->
+      <div class="hero-card">
+        <div class="hero-card-avatar" style="background:none; border:2px solid rgba(201,168,76,0.3); overflow:hidden; padding:0;">
+          <img src="img/franklin.png" alt="Franklin Ayllón" style="width:100%; height:100%; object-fit:cover;">
+        </div>
+        <div class="hero-card-name">Franklin R. Ayllón Pabón</div>
+        <div class="hero-card-role">Contador Tributarista · Auditor Certificado</div>
+        <div class="hero-card-items">
+          <div class="hero-card-item">📍 La Paz, Bolivia</div>
+          <div class="hero-card-item">🌐 Atención virtual a todo el país</div>
+          <div class="hero-card-item">⏰ Lun–Vie 8:00–18:00 · Sáb 9:00–13:00</div>
+          <div class="hero-card-item">✅ Primera consulta gratuita</div>
+        </div>
+        <a href="https://wa.me/59168064859" class="hero-card-wa">💬 Escribir por WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  
+  <!-- PREVIEW SERVICIOS -->
+  <section style="padding: 80px 2rem; background: var(--navy); position:relative; overflow:hidden;">
+    <div style="max-width:1200px; margin:0 auto;">
+      <div class="animate-up" style="margin-bottom:2.5rem;">
+        <p class="section-label" style="color:var(--gold)">Servicios</p>
+        <h2 class="section-title" style="color:var(--white)">¿En qué le podemos <span>ayudar?</span></h2>
+        <div class="section-divider"></div>
+        <p style="color:var(--text-light); font-size:1rem;">Desde declaraciones mensuales hasta auditorías completas. Atención virtual a todo Bolivia.</p>
+      </div>
+      <div class="srv-grid">
+        <div class="srv-card animate-up"><div class="srv-ico">📊</div><h3>Declaraciones tributarias</h3><p>IVA, IT, RC-IVA, IUE y todos los formularios del SIN. Sin errores, sin multas.</p></div>
+        <div class="srv-card animate-up"><div class="srv-ico">📋</div><h3>Contabilidad general</h3><p>Registro, control y reportes contables para su empresa o negocio.</p></div>
+        <div class="srv-card animate-up"><div class="srv-ico">🔍</div><h3>Auditoría</h3><p>Auditoría interna y externa. Revisión completa de sus estados financieros.</p></div>
+        <div class="srv-card animate-up"><div class="srv-ico">⚡</div><h3>Regularización SIN</h3><p>Multas, mora e intereses. Lo resolvemos antes de que crezca más.</p></div>
+        <div class="srv-card animate-up"><div class="srv-ico">🚀</div><h3>Asesoría emprendedores</h3><p>Inicio de actividades, elección de régimen tributario y primeros pasos.</p></div>
+        <div class="srv-card animate-up"><div class="srv-ico">🎓</div><h3>Clases virtuales</h3><p>Aprenda a manejar su contabilidad. Individuales y grupales disponibles.</p></div>
+      </div>
+      <div class="text-center">
+        <a href="servicios.html" class="btn btn-outline">Ver todos los servicios</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLASES PREVIEW -->
+  <section style="padding: 80px 2rem; background: var(--cream);">
+    <div style="max-width:1200px; margin:0 auto;">
+      <div class="animate-up" style="margin-bottom:2.5rem;">
+        <p class="section-label">Clases disponibles</p>
+        <h2 class="section-title">Aprenda contabilidad con quien<br><span>realmente</span> la ejerce</h2>
+        <div class="section-divider"></div>
+        <p style="color:var(--text-mid);">Clases virtuales dictadas por Franklin Ayllón. Temas prácticos, aplicados a la realidad boliviana.</p>
+      </div>
+      <div class="clases-grid" id="clases-container">
+        <div class="clase-card"><div class="clase-ico">🎓</div><div class="clase-info"><h3>Cargando clases...</h3><p>Un momento por favor.</p></div></div>
+      </div>
+      <div class="text-center">
+        <a href="servicios.html" class="btn btn-dark">Ver todas las clases</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG PREVIEW -->
+  <section class="blog-prev-section" style="padding: 80px 2rem;">
+    <div style="max-width:1200px; margin:0 auto;">
+      <div class="animate-up" style="margin-bottom:2.5rem;">
+        <p class="section-label">Blog tributario</p>
+        <h2 class="section-title">Artículos para entender<br>sus <span>impuestos</span></h2>
+        <div class="section-divider"></div>
+        <p style="color:var(--text-mid);">Contenido claro y práctico sobre tributación boliviana. Sin tecnicismos innecesarios.</p>
+      </div>
+      <div class="blog-prev-grid" id="blog-container">
+        <div class="blog-prev-card"><div class="blog-prev-img">📰</div><div class="blog-prev-body"><p class="blog-prev-cat">Cargando...</p><h3>Cargando artículos</h3><p>Un momento por favor.</p></div></div>
+      </div>
+      <div class="text-center">
+        <a href="blog.html" class="btn btn-dark">Ver todos los artículos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE FRANKLIN -->
+  <section style="padding: 80px 2rem; background: var(--cream);">
+    <div style="max-width:1200px; margin:0 auto;">
+      <div class="franklin-grid">
+        <div class="franklin-foto-wrap animate-up">
+          <div class="franklin-placeholder" id="foto-placeholder">
+            <span>📷</span>
+            <p>Foto de Franklin Ayllón</p>
+          </div>
+          <img id="foto-franklin" class="franklin-foto" alt="Franklin Ayllón">
+          <div class="franklin-exp-badge">
+            <div class="franklin-exp-n">+20</div>
+            <div class="franklin-exp-l">años de experiencia</div>
+          </div>
+        </div>
+        <div class="franklin-texto animate-up">
+          <p class="section-label">Sobre Franklin</p>
+          <h2 class="section-title">Contador con experiencia<br>en empresas <span>públicas y privadas</span></h2>
+          <div class="section-divider"></div>
+          <p>Franklin Rolando Ayllón Pabón es Contador Tributarista y Auditor Certificado con más de 20 años de trayectoria en Bolivia. Ha trabajado en empresas tanto del sector público como privado, acumulando experiencia en una amplia variedad de situaciones tributarias y contables.</p>
+          <p>Su especialidad es acompañar a emprendedores y empresas a ordenar su situación fiscal, evitar multas y tomar decisiones con información clara.</p>
+          <div class="franklin-mini-grid">
+            <div class="franklin-mini"><strong>Tributación</strong>Declaraciones, RC-IVA, IVA, IT, IUE</div>
+            <div class="franklin-mini"><strong>Auditoría</strong>Interna y externa</div>
+            <div class="franklin-mini"><strong>Regularización</strong>Multas y mora ante el SIN</div>
+            <div class="franklin-mini"><strong>Enseñanza</strong>Clases virtuales individuales y grupales</div>
+          </div>
+          <a href="servicios.html" class="btn btn-primary">Ver todos los servicios</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO PREVIEW -->
+  <section class="contacto-prev-section" style="padding: 80px 2rem;">
+    <div style="max-width:1200px; margin:0 auto;">
+      <div class="contacto-prev-grid">
+        <div class="animate-up">
+          <p class="section-label">Contacto</p>
+          <h2 class="section-title">Hablemos sobre<br>su situación <span>fiscal</span></h2>
+          <div class="section-divider"></div>
+          <p style="color:var(--text-mid); margin-bottom:2rem; line-height:1.8;">Primera consulta completamente gratuita. Cuénteme sobre su negocio y encontramos el mejor camino juntos.</p>
+          <a href="contacto.html" class="btn btn-primary">Ir a contacto</a>
+        </div>
+        <div class="contacto-prev-cards animate-up">
+          <a href="https://wa.me/59168064859" class="contacto-prev-card">
+            <div class="contacto-prev-ico">📱</div>
+            <div><div class="contacto-prev-lbl">WhatsApp</div><div class="contacto-prev-val">+591 68064859</div></div>
+          </a>
+          <a href="mailto:ayllon.consulting@gmail.com" class="contacto-prev-card">
+            <div class="contacto-prev-ico">✉️</div>
+            <div><div class="contacto-prev-lbl">Correo</div><div class="contacto-prev-val">ayllon.consulting@gmail.com</div></div>
+          </a>
+          <div class="contacto-prev-card">
+            <div class="contacto-prev-ico">📍</div>
+            <div><div class="contacto-prev-lbl">Ubicación</div><div class="contacto-prev-val">La Paz · Atención virtual a todo Bolivia</div></div>
+          </div>
+          <div class="contacto-prev-card">
+            <div class="contacto-prev-ico">🕐</div>
+            <div><div class="contacto-prev-lbl">Horario</div><div class="contacto-prev-val">Lun–Vie 8:00–18:00 · Sáb 9:00–13:00</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="position:relative; overflow:hidden;">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <img src="img/logo.png" alt="Ayllón Tributaria" style="height:38px; width:auto; object-fit:contain;">
+          <div class="nav-logo-text" style="color:var(--white)">Ayllón<span class="nav-logo-sub">Tributaria</span></div>
+        </a>
+        <p>Franklin Rolando Ayllón Pabón · Contador Tributarista y Auditor Certificado. Asesoría tributaria profesional para emprendedores y empresas bolivianas.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="servicios.html">Declaraciones tributarias</a></li>
+          <li><a href="servicios.html">Contabilidad general</a></li>
+          <li><a href="servicios.html">Auditorías</a></li>
+          <li><a href="servicios.html">Regularización SIN</a></li>
+          <li><a href="servicios.html">Clases virtuales</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 <span>Ayllón Tributaria</span>. Todos los derechos reservados.</p>
+      <p>Hecho con dedicación para Bolivia 🇧🇴</p>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/59168064859" class="wa-float" title="WhatsApp">💬</a>
+
+  <script type="module">
+  import { db, auth, showToast, formatDate } from './js/main.js';
+
+  // ── AUTH ──
+  function verificar() {
+    if (auth.isLoggedIn()) mostrarPanel();
+    else mostrarLogin();
+  }
+
+  function mostrarLogin() {
+    document.getElementById('login-wrap').style.display = 'flex';
+    document.getElementById('admin-wrap').classList.remove('visible');
+  }
+
+  function mostrarPanel() {
+    document.getElementById('login-wrap').style.display = 'none';
+    document.getElementById('admin-wrap').classList.add('visible');
+    cargarResumen();
+    cargarMensajes();
+    cargarBlogsTabla();
+    cargarCursosTabla();
+    cargarRedes();
+    cargarFotoPerfil();
+  }
+
+  document.getElementById('btn-login').addEventListener('click', () => {
+    const email = document.getElementById('login-email').value.trim();
+    const pass  = document.getElementById('login-pass').value;
+    const err   = document.getElementById('login-error');
+    if (auth.login(email, pass)) {
+      mostrarPanel();
+    } else {
+      err.style.display = 'block';
+    }
+  });
+
+  document.getElementById('btn-logout').addEventListener('click', () => {
+    auth.logout();
+    mostrarLogin();
+  });
+
+  verificar();
+
+  // ── NAVEGACION SIDEBAR ──
+  document.querySelectorAll('.sidebar-btn[data-tab]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+    });
+  });
+
+  // ── RESUMEN ──
+  async function cargarResumen() {
+    try {
+      const [blogs, cursos, mensajes] = await Promise.all([
+        db.getBlogs(), db.getCursos(), db.getMensajes()
+      ]);
+      document.getElementById('stat-blogs').textContent    = blogs.length;
+      document.getElementById('stat-cursos').textContent   = cursos.length;
+      document.getElementById('stat-mensajes').textContent = mensajes.length;
+      document.getElementById('stat-nuevos').textContent   = mensajes.filter(m => !m.leido).length;
+    } catch(e) {}
+  }
+
+  // ── MENSAJES ──
+  async function cargarMensajes() {
+    const lista = document.getElementById('mensajes-lista');
+    try {
+      const mensajes = await db.getMensajes();
+      if (mensajes.length === 0) { lista.innerHTML = '<p style="color:var(--text-mid);padding:1rem">No hay mensajes aún.</p>'; return; }
+      lista.innerHTML = '';
+      mensajes.forEach(m => {
+        const div = document.createElement('div');
+        div.className = `mensaje-card ${!m.leido ? 'nuevo' : ''}`;
+        div.innerHTML = `
+          <div class="mensaje-card-header">
+            <div>
+              <p class="mensaje-nombre">${m.nombre} ${!m.leido ? '<span style="font-size:0.7rem;background:var(--gold-pale);color:var(--navy);padding:2px 8px;border-radius:999px;margin-left:6px">Nuevo</span>' : ''}</p>
+              <p class="mensaje-servicio">${m.servicio || 'Consulta general'}</p>
+            </div>
+            <span class="mensaje-fecha">${formatDate(m.fecha)}</span>
+          </div>
+          <p class="mensaje-texto">${m.mensaje}</p>
+          <div class="mensaje-contacto">
+            📧 <a href="mailto:${m.email}">${m.email}</a>
+            ${m.telefono ? ` &nbsp;|&nbsp; 📱 <a href="https://wa.me/${m.telefono.replace(/\D/g,'')}">${m.telefono}</a>` : ''}
+          </div>
+          <div style="margin-top:0.75rem;display:flex;gap:0.5rem;">
+            ${!m.leido ? `<button class="btn-sm btn-edit" onclick="marcarLeido('${m.id}', this)">Marcar como leído</button>` : ''}
+            <button class="btn-sm btn-danger" onclick="eliminarMensaje('${m.id}', this)">Eliminar</button>
+          </div>
+        `;
+        lista.appendChild(div);
+      });
+    } catch(e) { lista.innerHTML = '<p style="color:var(--text-mid);padding:1rem">Error al cargar mensajes.</p>'; }
+  }
+
+  window.marcarLeido = async function(id, btn) {
+    await db.updateMensaje(id, { leido: true });
+    btn.closest('.mensaje-card').classList.remove('nuevo');
+    btn.remove();
+    cargarResumen();
+  };
+
+  window.eliminarMensaje = async function(id, btn) {
+    if (!confirm('¿Eliminar este mensaje?')) return;
+    await db.deleteMensaje(id);
+    btn.closest('.mensaje-card').remove();
+    cargarResumen();
+  };
+
+  // ── SUBIR IMAGEN A CLOUDINARY ──
+  async function subirImagen(file, carpeta) {
+    if (!file) return null;
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'consultora');
+    formData.append('folder', `ayllon-tributaria/${carpeta}`);
+    const res = await fetch('https://api.cloudinary.com/v1_1/dhz8whvie/image/upload', {
+      method: 'POST', body: formData
+    });
+    const data = await res.json();
+    return data.secure_url;
+  }
+
+  // PREVIEW IMAGENES
+  function setupPreview(inputId, previewId) {
+    document.getElementById(inputId).addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const prev = document.getElementById(previewId);
+      prev.src = URL.createObjectURL(file);
+      prev.classList.add('visible');
+    });
+  }
+  setupPreview('blog-img-portada', 'prev-portada');
+  setupPreview('blog-img-medio',   'prev-medio');
+  setupPreview('blog-img-final',   'prev-final');
+
+  // ── BLOGS ──
+  async function cargarBlogsTabla() {
+    const tbody = document.getElementById('blogs-tabla');
+    try {
+      const blogs = await db.getBlogs();
+      if (blogs.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="table-empty">No hay artículos publicados.</td></tr>'; return; }
+      tbody.innerHTML = '';
+      blogs.forEach(b => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${b.titulo}</strong></td>
+          <td><span class="badge badge-gold">${b.categoria || 'Tributación'}</span></td>
+          <td>${formatDate(b.fecha)}</td>
+          <td style="display:flex;gap:0.5rem;">
+            <button class="btn-sm btn-edit" onclick="editarBlog('${b.id}')">Editar</button>
+            <button class="btn-sm btn-danger" onclick="eliminarBlog('${b.id}', this)">Eliminar</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    } catch(e) { tbody.innerHTML = '<tr><td colspan="4" class="table-empty">Error al cargar.</td></tr>'; }
+  }
+
+  document.getElementById('btn-guardar-blog').addEventListener('click', async () => {
+    const titulo     = document.getElementById('blog-titulo').value.trim();
+    const contenido1 = document.getElementById('blog-contenido1').value.trim();
+    if (!titulo || !contenido1) { showToast('Título y contenido son obligatorios.', 'error'); return; }
+    const btn = document.getElementById('btn-guardar-blog');
+    btn.disabled = true; btn.textContent = 'Guardando...';
+    try {
+      const editId      = document.getElementById('blog-edit-id').value;
+      const portadaFile = document.getElementById('blog-img-portada').files[0];
+      const medioFile   = document.getElementById('blog-img-medio').files[0];
+      const finalFile   = document.getElementById('blog-img-final').files[0];
+      const [urlPortada, urlMedio, urlFinal] = await Promise.all([
+        portadaFile ? subirImagen(portadaFile, 'blogs') : Promise.resolve(null),
+        medioFile   ? subirImagen(medioFile,   'blogs') : Promise.resolve(null),
+        finalFile   ? subirImagen(finalFile,   'blogs') : Promise.resolve(null),
+      ]);
+      const datos = {
+        titulo,
+        categoria:            document.getElementById('blog-categoria').value,
+        autor:                document.getElementById('blog-autor').value.trim(),
+        resumen:              document.getElementById('blog-resumen').value.trim(),
+        contenido:            contenido1,
+        contenido2:           document.getElementById('blog-contenido2').value.trim(),
+        contenido3:           document.getElementById('blog-contenido3').value.trim(),
+        imagen_medio_caption: document.getElementById('blog-img-medio-caption').value.trim(),
+        imagen_final_caption: document.getElementById('blog-img-final-caption').value.trim(),
+      };
+      if (urlPortada) datos.imagen_portada = urlPortada;
+      if (urlMedio)   datos.imagen_medio   = urlMedio;
+      if (urlFinal)   datos.imagen_final   = urlFinal;
+      if (editId) { await db.updateBlog(editId, datos); showToast('Artículo actualizado.'); }
+      else        { await db.addBlog(datos);            showToast('Artículo publicado.');   }
+      limpiarFormBlog();
+      cargarBlogsTabla();
+      cargarResumen();
+    } catch(e) { showToast('Error: ' + e.message, 'error'); }
+    btn.disabled = false; btn.textContent = 'Publicar artículo';
+  });
+
+  function limpiarFormBlog() {
+    ['blog-titulo','blog-autor','blog-resumen','blog-contenido1','blog-contenido2','blog-contenido3','blog-img-medio-caption','blog-img-final-caption'].forEach(id => document.getElementById(id).value = '');
+    ['blog-img-portada','blog-img-medio','blog-img-final'].forEach(id => document.getElementById(id).value = '');
+    ['prev-portada','prev-medio','prev-final'].forEach(id => document.getElementById(id).classList.remove('visible'));
+    document.getElementById('blog-edit-id').value = '';
+    document.getElementById('blog-form-titulo').textContent = '➕ Nuevo artículo';
+    document.getElementById('btn-guardar-blog').textContent = 'Publicar artículo';
+    document.getElementById('btn-cancelar-blog').style.display = 'none';
+  }
+
+  window.editarBlog = async function(id) {
+    const b = await db.getBlog(id);
+    if (!b) return;
+    document.getElementById('blog-edit-id').value    = id;
+    document.getElementById('blog-titulo').value     = b.titulo || '';
+    document.getElementById('blog-categoria').value  = b.categoria || 'Tributación';
+    document.getElementById('blog-autor').value      = b.autor || '';
+    document.getElementById('blog-resumen').value    = b.resumen || '';
+    document.getElementById('blog-contenido1').value = b.contenido || '';
+    document.getElementById('blog-contenido2').value = b.contenido2 || '';
+    document.getElementById('blog-contenido3').value = b.contenido3 || '';
+    document.getElementById('blog-img-medio-caption').value = b.imagen_medio_caption || '';
+    document.getElementById('blog-img-final-caption').value = b.imagen_final_caption || '';
+    if (b.imagen_portada) { document.getElementById('prev-portada').src = b.imagen_portada; document.getElementById('prev-portada').classList.add('visible'); }
+    if (b.imagen_medio)   { document.getElementById('prev-medio').src   = b.imagen_medio;   document.getElementById('prev-medio').classList.add('visible'); }
+    if (b.imagen_final)   { document.getElementById('prev-final').src   = b.imagen_final;   document.getElementById('prev-final').classList.add('visible'); }
+    document.getElementById('blog-form-titulo').textContent = '✏️ Editando artículo';
+    document.getElementById('btn-guardar-blog').textContent = 'Guardar cambios';
+    document.getElementById('btn-cancelar-blog').style.display = 'inline-flex';
+    document.querySelector('[data-tab="blogs"]').click();
+    window.scrollTo(0, 0);
+  };
+
+  document.getElementById('btn-cancelar-blog').addEventListener('click', limpiarFormBlog);
+
+  window.eliminarBlog = async function(id, btn) {
+    if (!confirm('¿Eliminar este artículo?')) return;
+    await db.deleteBlog(id);
+    btn.closest('tr').remove();
+    showToast('Artículo eliminado.');
+    cargarResumen();
+  };
+
+  // ── CURSOS ──
+  async function cargarCursosTabla() {
+    const tbody = document.getElementById('cursos-tabla');
+    try {
+      const cursos = await db.getCursos();
+      if (cursos.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="table-empty">No hay cursos registrados.</td></tr>'; return; }
+      tbody.innerHTML = '';
+      cursos.forEach(c => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${c.titulo}</strong></td>
+          <td>${c.modalidad || '—'}</td>
+          <td>Bs. ${c.precio || '0'}</td>
+          <td>${c.duracion || '—'}</td>
+          <td style="display:flex;gap:0.5rem;">
+            <button class="btn-sm btn-edit" onclick="editarCurso('${c.id}')">Editar</button>
+            <button class="btn-sm btn-danger" onclick="eliminarCurso('${c.id}', this)">Eliminar</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    } catch(e) { tbody.innerHTML = '<tr><td colspan="5" class="table-empty">Error al cargar.</td></tr>'; }
+  }
+
+  document.getElementById('btn-guardar-curso').addEventListener('click', async () => {
+    const titulo = document.getElementById('curso-titulo').value.trim();
+    const desc   = document.getElementById('curso-descripcion').value.trim();
+    if (!titulo || !desc) { showToast('Título y descripción son obligatorios.', 'error'); return; }
+    const btn = document.getElementById('btn-guardar-curso');
+    btn.disabled = true; btn.textContent = 'Guardando...';
+    try {
+      const editId = document.getElementById('curso-edit-id').value;
+      const datos  = {
+        titulo,
+        modalidad:   document.getElementById('curso-modalidad').value,
+        precio:      document.getElementById('curso-precio').value,
+        duracion:    document.getElementById('curso-duracion').value.trim(),
+        descripcion: desc,
+      };
+      if (editId) { await db.updateCurso(editId, datos); showToast('Curso actualizado.'); }
+      else        { await db.addCurso(datos);            showToast('Curso guardado.');    }
+      limpiarFormCurso();
+      cargarCursosTabla();
+      cargarResumen();
+    } catch(e) { showToast('Error: ' + e.message, 'error'); }
+    btn.disabled = false; btn.textContent = 'Guardar curso';
+  });
+
+  function limpiarFormCurso() {
+    ['curso-titulo','curso-precio','curso-duracion','curso-descripcion'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('curso-edit-id').value = '';
+    document.getElementById('curso-form-titulo').textContent = '➕ Nuevo curso';
+    document.getElementById('btn-guardar-curso').textContent = 'Guardar curso';
+    document.getElementById('btn-cancelar-curso').style.display = 'none';
+  }
+
+  window.editarCurso = async function(id) {
+    const cursos = await db.getCursos();
+    const c = cursos.find(x => x.id === id);
+    if (!c) return;
+    document.getElementById('curso-edit-id').value     = id;
+    document.getElementById('curso-titulo').value      = c.titulo || '';
+    document.getElementById('curso-modalidad').value   = c.modalidad || 'Presencial';
+    document.getElementById('curso-precio').value      = c.precio || '';
+    document.getElementById('curso-duracion').value    = c.duracion || '';
+    document.getElementById('curso-descripcion').value = c.descripcion || '';
+    document.getElementById('curso-form-titulo').textContent = '✏️ Editando curso';
+    document.getElementById('btn-guardar-curso').textContent = 'Guardar cambios';
+    document.getElementById('btn-cancelar-curso').style.display = 'inline-flex';
+    document.querySelector('[data-tab="cursos"]').click();
+    window.scrollTo(0, 0);
+  };
+
+  document.getElementById('btn-cancelar-curso').addEventListener('click', limpiarFormCurso);
+
+  window.eliminarCurso = async function(id, btn) {
+    if (!confirm('¿Eliminar este curso?')) return;
+    await db.deleteCurso(id);
+    btn.closest('tr').remove();
+    showToast('Curso eliminado.');
+    cargarResumen();
+  };
+
+  // ── REDES ──
+  async function cargarRedes() {
+    try {
+      const r = await db.getRedes();
+      if (!r) return;
+      if (r.whatsapp)  document.getElementById('red-whatsapp').value  = r.whatsapp;
+      if (r.facebook)  document.getElementById('red-facebook').value  = r.facebook;
+      if (r.instagram) document.getElementById('red-instagram').value = r.instagram;
+      if (r.tiktok)    document.getElementById('red-tiktok').value    = r.tiktok;
+    } catch(e) {}
+  }
+
+  document.getElementById('btn-guardar-redes').addEventListener('click', async () => {
+    const datos = {
+      whatsapp:  document.getElementById('red-whatsapp').value.trim(),
+      facebook:  document.getElementById('red-facebook').value.trim(),
+      instagram: document.getElementById('red-instagram').value.trim(),
+      tiktok:    document.getElementById('red-tiktok').value.trim(),
+    };
+    try {
+      await db.saveRedes(datos);
+      showToast('Redes sociales guardadas.');
+    } catch(e) { showToast('Error al guardar redes.', 'error'); }
+  });
+
+  // ── PERFIL ──
+  async function cargarFotoPerfil() {
+    try {
+      const perfil = await db.getPerfil();
+      if (perfil && perfil.foto) {
+        document.getElementById('foto-placeholder-admin').style.display = 'none';
+        const img = document.getElementById('foto-preview-actual');
+        img.src = perfil.foto; img.style.display = 'block';
+        document.getElementById('btn-eliminar-foto').style.display = 'inline-flex';
+      }
+    } catch(e) {}
+  }
+
+  document.getElementById('input-foto-perfil').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const prev = document.getElementById('foto-preview-nueva');
+    prev.src = URL.createObjectURL(file);
+    prev.classList.add('visible');
+  });
+
+  document.getElementById('btn-guardar-foto').addEventListener('click', async () => {
+    const file = document.getElementById('input-foto-perfil').files[0];
+    if (!file) { showToast('Seleccione una foto primero.', 'error'); return; }
+    const btn = document.getElementById('btn-guardar-foto');
+    btn.disabled = true; btn.textContent = 'Subiendo...';
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'consultora');
+      formData.append('folder', 'ayllon-tributaria/perfil');
+      const res  = await fetch('https://api.cloudinary.com/v1_1/dhz8whvie/image/upload', { method: 'POST', body: formData });
+      const data = await res.json();
+      await db.savePerfil(data.secure_url);
+      document.getElementById('foto-placeholder-admin').style.display = 'none';
+      const img = document.getElementById('foto-preview-actual');
+      img.src = data.secure_url; img.style.display = 'block';
+      document.getElementById('btn-eliminar-foto').style.display = 'inline-flex';
+      showToast('Foto guardada correctamente.');
+    } catch(e) { showToast('Error al subir la foto.', 'error'); }
+    btn.disabled = false; btn.textContent = 'Guardar foto';
+  });
+
+  document.getElementById('btn-eliminar-foto').addEventListener('click', async () => {
+    if (!confirm('¿Eliminar la foto de perfil?')) return;
+    try {
+      await db.savePerfil(null);
+      document.getElementById('foto-preview-actual').style.display = 'none';
+      document.getElementById('foto-placeholder-admin').style.display = 'flex';
+      document.getElementById('btn-eliminar-foto').style.display = 'none';
+      showToast('Foto eliminada.');
+    } catch(e) { showToast('Error al eliminar.', 'error'); }
+  });
+
+</script>
+
+  <script>
+    document.addEventListener('keydown', function(e) {
+      if (e.shiftKey && e.altKey && e.key === 'A') {
+        window.location.href = 'admin.html';
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Servicios | Ayllón Tributaria</title>
+  <meta name="description" content="Servicios de tributación, contabilidad y auditoría en La Paz, Bolivia.">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* SERVICIOS */
+    .servicios-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 2rem; margin-top: 2rem;
+    }
+    .servicio-card {
+      background: var(--white); border-radius: var(--radius-lg);
+      padding: 2rem; border: 1px solid rgba(201,168,76,0.1);
+      box-shadow: var(--shadow); transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .servicio-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-gold); }
+    .servicio-numero {
+      font-family: 'Playfair Display', serif; font-size: 3rem;
+      font-weight: 900; color: rgba(201,168,76,0.15); line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .servicio-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .servicio-card h3 {
+      font-family: 'Playfair Display', serif; font-size: 1.3rem;
+      font-weight: 700; color: var(--navy); margin-bottom: 0.75rem;
+    }
+    .servicio-card p { color: var(--text-mid); font-size: 0.92rem; line-height: 1.7; margin-bottom: 1.25rem; }
+    .servicio-lista { list-style: none; }
+    .servicio-lista li {
+      padding: 0.4rem 0; font-size: 0.88rem; color: var(--text-mid);
+      border-bottom: 1px solid rgba(201,168,76,0.08);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .servicio-lista li::before { content: '→'; color: var(--gold); font-weight: 600; flex-shrink: 0; }
+    .servicio-lista li:last-child { border-bottom: none; }
+    .servicio-tag {
+      display: inline-block; margin-top: 1.25rem;
+      padding: 4px 14px; border-radius: 999px;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .tag-principal { background: var(--gold-pale); color: var(--navy); }
+    .tag-secundario { background: rgba(10,22,40,0.08); color: var(--navy-light); }
+
+    /* SEPARADOR SECCIONES */
+    .seccion-header {
+      background: var(--navy-mid); padding: 2rem;
+      border-radius: var(--radius-lg); margin-bottom: 2rem;
+      border-left: 4px solid var(--gold);
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .seccion-header-icon { font-size: 2rem; }
+    .seccion-header h2 {
+      font-family: 'Playfair Display', serif; color: var(--white);
+      font-size: 1.5rem; font-weight: 700;
+    }
+    .seccion-header p { color: var(--text-light); font-size: 0.9rem; margin-top: 0.25rem; }
+
+    /* CURSOS */
+    .cursos-wrap { background: var(--navy); padding: 80px 2rem; }
+    .cursos-inner { max-width: 1200px; margin: 0 auto; }
+    .cursos-inner .section-title { color: var(--white); }
+    .cursos-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem; margin-top: 2rem;
+    }
+    .curso-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.2);
+      border-radius: var(--radius-lg); padding: 1.75rem;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .curso-card:hover { transform: translateY(-4px); border-color: var(--gold); }
+    .curso-badge {
+      display: inline-block; padding: 3px 10px; border-radius: 999px;
+      font-size: 0.7rem; font-weight: 600;
+      background: rgba(201,168,76,0.15); color: var(--gold); margin-bottom: 1rem;
+    }
+    .curso-card h3 { font-family: 'Playfair Display', serif; color: var(--white); font-size: 1.1rem; margin-bottom: 0.75rem; }
+    .curso-card p { color: var(--text-light); font-size: 0.88rem; line-height: 1.6; margin-bottom: 1.25rem; }
+    .curso-meta { display: flex; justify-content: space-between; align-items: center; }
+    .curso-precio { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--gold); }
+    .curso-precio small { font-family: 'DM Sans', sans-serif; font-size: 0.75rem; color: var(--text-light); display: block; font-weight: 400; }
+    .curso-empty { text-align: center; padding: 3rem; color: var(--text-light); }
+
+    /* CTA */
+    .cta-section {
+      background: linear-gradient(135deg, var(--navy-mid), var(--navy-light));
+      padding: 80px 2rem; text-align: center;
+      border-top: 1px solid rgba(201,168,76,0.2);
+    }
+    .cta-section h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); color: var(--white); margin-bottom: 1rem; }
+    .cta-section h2 span { color: var(--gold); }
+    .cta-section p { color: var(--text-light); margin-bottom: 2rem; font-size: 1.05rem; }
+
+    @media (max-width: 768px) {
+      .servicios-grid { grid-template-columns: 1fr; }
+      .cursos-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <img src="img/logo.png" alt="" aria-hidden="true" class="logo-watermark">
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <img src="img/logo.png" alt="Ayllón Tributaria" style="height:38px; width:auto; object-fit:contain;">
+      <div class="nav-logo-text">
+        Ayllón
+        <span class="nav-logo-sub">Tributaria</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="servicios.html">Servicios</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="contacto.html" class="nav-cta">Contacto</a></li>
+    </ul>
+    <button class="nav-hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <div class="page-hero" style="position:relative; overflow:hidden;">
+    <img src="img/logo.png" alt="" aria-hidden="true" style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:420px; opacity:0.07; pointer-events:none; user-select:none;">
+    <h1>Nuestros <span>Servicios</span></h1>
+    <p>Soluciones profesionales en tributación, contabilidad y auditoría para personas y empresas en Bolivia.</p>
+  </div>
+
+  <!-- SERVICIOS TRIBUTACION -->
+  <section class="section">
+    <div class="seccion-header animate-up">
+      <div class="seccion-header-icon">📋</div>
+      <div>
+        <h2>Tributación</h2>
+        <p>Servicio principal — cumplimiento fiscal ante el SIN</p>
+      </div>
+    </div>
+    <div class="servicios-grid">
+
+      <div class="servicio-card animate-up">
+        <div class="servicio-numero">01</div>
+        <div class="servicio-icon">🧾</div>
+        <h3>Declaraciones de Impuestos</h3>
+        <p>Elaboración y presentación de declaraciones ante el Servicio de Impuestos Nacionales con exactitud y puntualidad.</p>
+        <ul class="servicio-lista">
+          <li>IVA, IT, IUE</li>
+          <li>RC-IVA para dependientes</li>
+          <li>Declaraciones juradas</li>
+          <li>Rectificatorias</li>
+        </ul>
+        <span class="servicio-tag tag-principal">Servicio principal</span>
+      </div>
+
+      <div class="servicio-card animate-up">
+        <div class="servicio-numero">02</div>
+        <div class="servicio-icon">🏢</div>
+        <h3>Asesoría Empresarial Tributaria</h3>
+        <p>Planificación fiscal para empresas que buscan optimizar su carga impositiva dentro del marco legal boliviano.</p>
+        <ul class="servicio-lista">
+          <li>Planificación tributaria</li>
+          <li>Régimen tributario adecuado</li>
+          <li>Asesoría en fusiones y adquisiciones</li>
+          <li>Consultas ante el SIN</li>
+        </ul>
+        <span class="servicio-tag tag-principal">Servicio principal</span>
+      </div>
+
+      <div class="servicio-card animate-up">
+        <div class="servicio-numero">03</div>
+        <div class="servicio-icon">⚠️</div>
+        <h3>Fiscalización y Deudas</h3>
+        <p>Representación y defensa ante procesos de fiscalización del SIN, gestión de deudas tributarias y planes de pago.</p>
+        <ul class="servicio-lista">
+          <li>Respuesta a vistas de cargo</li>
+          <li>Recursos de alzada</li>
+          <li>Gestión de multas y mora</li>
+          <li>Facilidades de pago</li>
+        </ul>
+        <span class="servicio-tag tag-principal">Servicio principal</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SERVICIOS CONTABILIDAD -->
+  <section class="section" style="padding-top:0;">
+    <div class="seccion-header animate-up">
+      <div class="seccion-header-icon">📊</div>
+      <div>
+        <h2>Contabilidad General</h2>
+        <p>Registro, control y reportes financieros para su negocio</p>
+      </div>
+    </div>
+    <div class="servicios-grid">
+
+      <div class="servicio-card animate-up">
+        <div class="servicio-numero">04</div>
+        <div class="servicio-icon">📒</div>
+        <h3>Contabilidad General</h3>
+        <p>Llevamos la contabilidad de su empresa de forma ordenada, garantizando información financiera confiable y actualizada.</p>
+        <ul class="servicio-lista">
+          <li>Registro de operaciones</li>
+          <li>Libros contables</li>
+          <li>Balance general</li>
+          <li>Estado de resultados</li>
+        </ul>
+        <span class="servicio-tag tag-secundario">Contabilidad</span>
+      </div>
+
+      <div class="servicio-card animate-up">
+        <div class="servicio-numero">05</div>
+        <div class="servicio-icon">💰</div>
+        <h3>Nóminas y Planillas</h3>
+        <p>Gestión completa de planillas de sueldos, beneficios sociales y aportes a la AFP y CNS conforme a la legislación boliviana.</p>
+        <ul class="servicio-lista">
+          <li>Planilla de sueldos</li>
+          <li>Aguinaldo y bono de producción</li>
+          <li>Aportes AFP y CNS</li>
+          <li>Liquidación de beneficios</li>
+        </ul>
+        <span class="servicio-tag tag-secundario">Contabilidad</span>
+      </div>
+
+      <div class="servicio-card animate-up">
+        <div class="servicio-numero">06</div>
+        <div class="servicio-icon">📈</div>
+        <h3>Análisis Financiero</h3>
+        <p>Interpretación de estados financieros para la toma de decisiones estratégicas en su empresa.</p>
+        <ul class="servicio-lista">
+          <li>Análisis de rentabilidad</li>
+          <li>Flujo de caja</li>
+          <li>Indicadores financieros</li>
+          <li>Informes para directivos</li>
+        </ul>
+        <span class="servicio-tag tag-secundario">Contabilidad</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SERVICIOS AUDITORIA -->
+  <section class="section" style="padding-top:0;">
+    <div class="seccion-header animate-up">
+      <div class="seccion-header-icon">🔍</div>
+      <div>
+        <h2>Auditoría</h2>
+        <p>Revisión independiente y objetiva de cuentas y procesos</p>
+      </div>
+    </div>
+    <div class="servicios-grid">
+
+      <div class="servicio-card animate-up">
+        <div class="servicio-numero">07</div>
+        <div class="servicio-icon">🔎</div>
+        <h3>Auditoría Financiera</h3>
+        <p>Examen independiente de los estados financieros para emitir una opinión sobre su razonabilidad y veracidad.</p>
+        <ul class="servicio-lista">
+          <li>Revisión de estados financieros</li>
+          <li>Dictamen de auditor independiente</li>
+          <li>Cumplimiento de NIIF</li>
+          <li>Informe de hallazgos</li>
+        </ul>
+        <span class="servicio-tag tag-secundario">Auditoría</span>
+      </div>
+
+      <div class="servicio-card animate-up">
+        <div class="servicio-numero">08</div>
+        <div class="servicio-icon">🛡️</div>
+        <h3>Auditoría Tributaria</h3>
+        <p>Revisión del cumplimiento de obligaciones fiscales para detectar contingencias antes de una fiscalización del SIN.</p>
+        <ul class="servicio-lista">
+          <li>Revisión de declaraciones</li>
+          <li>Detección de contingencias</li>
+          <li>Recomendaciones correctivas</li>
+          <li>Informe ejecutivo</li>
+        </ul>
+        <span class="servicio-tag tag-secundario">Auditoría</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CURSOS -->
+  <section class="cursos-wrap">
+    <div class="cursos-inner">
+      <p class="section-label animate-up">Formación profesional</p>
+      <h2 class="section-title animate-up">Cursos <span style="color:var(--gold)">disponibles</span></h2>
+      <div class="section-divider animate-up"></div>
+      <div class="cursos-grid" id="cursos-container">
+        <div class="curso-empty">Cargando cursos...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2 class="animate-up">¿Necesita alguno de estos <span>servicios</span>?</h2>
+    <p class="animate-up">Contáctenos hoy. Primera consulta sin costo.</p>
+    <a href="contacto.html" class="btn btn-primary animate-up">Contactar ahora →</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="position:relative; overflow:hidden;">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <img src="img/logo.png" alt="Ayllón Tributaria" style="height:38px; width:auto; object-fit:contain;">
+          <div class="nav-logo-text" style="color:var(--white)">Ayllón<span class="nav-logo-sub">Tributaria</span></div>
+        </a>
+        <p>Asesoría contable, tributaria y de auditoría en La Paz, Bolivia.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="servicios.html">Tributación</a></li>
+          <li><a href="servicios.html">Contabilidad</a></li>
+          <li><a href="servicios.html">Auditoría</a></li>
+          <li><a href="servicios.html">Cursos</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 <span>Ayllón Tributaria</span>. Todos los derechos reservados.</p>
+      <p>La Paz, Bolivia</p>
+    </div>
+  </footer>
+
+  <script type="module">
+  import { db } from './js/main.js';
+
+  async function cargarCursos() {
+    const container = document.getElementById('cursos-container');
+    try {
+      const cursos = await db.getCursos();
+      if (cursos.length === 0) {
+        container.innerHTML = '<div class="curso-empty">Próximamente anunciaremos nuevos cursos.</div>';
+        return;
+      }
+      container.innerHTML = cursos.map(c => `
+        <div class="curso-card animate-up">
+          <span class="curso-badge">${c.modalidad || 'Presencial'}</span>
+          <h3>${c.titulo}</h3>
+          <p>${c.descripcion || ''}</p>
+          <div class="curso-meta">
+            <div class="curso-precio">
+              Bs. ${c.precio || '0'}
+              <small>${c.duracion || ''}</small>
+            </div>
+            <a href="contacto.html" class="btn btn-primary" style="padding:8px 16px;font-size:0.85rem;">Inscribirse</a>
+          </div>
+        </div>
+      `).join('');
+    } catch(e) {
+      container.innerHTML = '<div class="curso-empty">Error al cargar cursos.</div>';
+    }
+  }
+
+  cargarCursos();
+</script>
+
+</body>
+</html>
