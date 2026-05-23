@@ -11,6 +11,7 @@ CORS(app, resources={
     r"/*": {
         "origins": [
             "https://ayllon-tributaria.netlify.app",
+            "https://consultora-ayllon.netlify.app",
             "http://localhost",
             "http://127.0.0.1:5500",
             "null"
