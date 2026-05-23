@@ -349,14 +349,12 @@
 
   // VISTA LISTA / DETALLE
   function mostrarDetalle(c) {
-    document.getElementById('cursos-section').style.display = 'none';
-    document.querySelector('.cta-section').style.display = 'none';
-    document.querySelector('footer').style.display = 'none';
+    document.querySelectorAll('body > *:not(#curso-detalle):not(nav)').forEach(el => el.style.display = 'none');
     const det = document.getElementById('curso-detalle');
     det.style.display = 'block';
     det.innerHTML = `
       <div style="max-width:900px; margin:0 auto; padding: 60px 2rem;">
-        <a href="#" id="btn-volver-curso" style="display:inline-flex;align-items:center;gap:6px;color:var(--gold);text-decoration:none;font-size:0.88rem;margin-bottom:2rem;">← Volver a servicios</a>
+        <a href="#" id="btn-volver-curso" style="display:inline-flex;align-items:center;gap:10px;background:var(--navy);color:var(--gold);text-decoration:none;font-size:1rem;font-weight:700;padding:12px 24px;border-radius:var(--radius);margin-bottom:2rem;border:2px solid rgba(201,168,76,0.3);transition:border-color 0.2s;">← Volver a servicios</a>
         <img src="${c.imagen}" alt="${c.titulo}" style="width:100%;max-height:420px;object-fit:cover;border-radius:var(--radius-lg);margin-bottom:2rem;">
         <span class="curso-badge">${c.modalidad || 'Presencial'}</span>
         <h1 style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--navy);margin:1rem 0 0.5rem;">${c.titulo}</h1>
@@ -371,9 +369,7 @@
     document.getElementById('btn-volver-curso').addEventListener('click', e => {
       e.preventDefault();
       det.style.display = 'none';
-      document.getElementById('cursos-section').style.display = 'block';
-      document.querySelector('.cta-section').style.display = 'block';
-      document.querySelector('footer').style.display = 'block';
+      document.querySelectorAll('body > *:not(#curso-detalle):not(nav)').forEach(el => el.style.display = '');
       window.scrollTo(0, 0);
     });
     window.scrollTo(0, 0);

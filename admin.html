@@ -467,6 +467,11 @@
             <span class="red-field-label">TikTok</span>
             <input type="text" id="red-tiktok" placeholder="https://tiktok.com/@ayllon.tributaria">
           </div>
+          <div class="red-field">
+            <span class="red-field-icon">💼</span>
+            <span class="red-field-label">LinkedIn</span>
+            <input type="text" id="red-linkedin" placeholder="https://linkedin.com/in/ayllon">
+          </div>
           <div style="margin-top:1.5rem;">
             <button class="btn btn-primary" id="btn-guardar-redes">Guardar redes sociales</button>
           </div>
@@ -856,6 +861,7 @@
       if (r.facebook)  document.getElementById('red-facebook').value  = r.facebook;
       if (r.instagram) document.getElementById('red-instagram').value = r.instagram;
       if (r.tiktok)    document.getElementById('red-tiktok').value    = r.tiktok;
+      if (r.linkedin)  document.getElementById('red-linkedin').value  = r.linkedin;
     } catch(e) {}
   }
 
@@ -865,6 +871,7 @@
       facebook:  document.getElementById('red-facebook').value.trim(),
       instagram: document.getElementById('red-instagram').value.trim(),
       tiktok:    document.getElementById('red-tiktok').value.trim(),
+      linkedin:  document.getElementById('red-linkedin').value.trim(),
     };
     try {
       await db.saveRedes(datos);

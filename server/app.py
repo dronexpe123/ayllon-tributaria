@@ -3,6 +3,7 @@ from flask_cors import CORS
 import psycopg2
 import psycopg2.extras
 import os
+import requests
 
 app = Flask(__name__)
 
@@ -26,8 +27,28 @@ def add_security_headers(response):
     response.headers['X-XSS-Protection'] = '1; mode=block'
     return response
 
-ADMIN_KEY   = os.environ.get('ADMIN_KEY', 'ayllon-admin-2026')
+ADMIN_KEY    = os.environ.get('ADMIN_KEY', 'ayllon-admin-2026')
 DATABASE_URL = os.environ.get('DATABASE_URL', '')
+TELEGRAM_TOKEN  = os.environ.get('TELEGRAM_TOKEN', '8652453036:AAFWtjv59i5KtyOWBBx6koSQp4a5UyWXA4o')
+TELEGRAM_CHAT   = os.environ.get('TELEGRAM_CHAT', '6073045527')
+
+def notify_telegram(mensaje_data):
+    try:
+        texto = (
+            f"📬 *Nuevo mensaje de contacto*\n\n"
+            f"👤 *Nombre:* {mensaje_data.get('nombre', '—')}\n"
+            f"📧 *Email:* {mensaje_data.get('email', '—')}\n"
+            f"📱 *Teléfono:* {mensaje_data.get('telefono', '—')}\n"
+            f"🔧 *Servicio:* {mensaje_data.get('servicio', '—')}\n\n"
+            f"💬 *Mensaje:*\n{mensaje_data.get('mensaje', '—')}"
+        )
+        requests.post(
+            f'https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage',
+            json={'chat_id': TELEGRAM_CHAT, 'text': texto, 'parse_mode': 'Markdown'},
+            timeout=5
+        )
+    except Exception:
+        pass
 
 def require_admin(f):
     from functools import wraps
@@ -112,8 +133,10 @@ def init_db():
             whatsapp TEXT,
             facebook TEXT,
             instagram TEXT,
-            tiktok TEXT
+            tiktok TEXT,
+            linkedin TEXT
         )''')
+        cur.execute('''ALTER TABLE redes ADD COLUMN IF NOT EXISTS linkedin TEXT''')
         cur.execute('''CREATE TABLE IF NOT EXISTS config (
             id TEXT PRIMARY KEY,
             foto TEXT
@@ -223,6 +246,7 @@ def create_mensaje():
         (d.get('nombre'), d.get('email'), d.get('telefono'),
          d.get('servicio'), d.get('mensaje')),
         commit=True)
+    notify_telegram(d)
     return jsonify({'ok': True})
 
 @app.route('/api/mensajes/<int:id>', methods=['PUT'])
@@ -250,12 +274,12 @@ def save_redes():
     d = request.json
     rows = query('SELECT id FROM redes', fetchall=True)
     if not rows:
-        query('INSERT INTO redes (whatsapp, facebook, instagram, tiktok) VALUES (%s,%s,%s,%s)',
-            (d.get('whatsapp'), d.get('facebook'), d.get('instagram'), d.get('tiktok')),
+        query('INSERT INTO redes (whatsapp, facebook, instagram, tiktok, linkedin) VALUES (%s,%s,%s,%s,%s)',
+            (d.get('whatsapp'), d.get('facebook'), d.get('instagram'), d.get('tiktok'), d.get('linkedin')),
             commit=True)
     else:
-        query('UPDATE redes SET whatsapp=%s, facebook=%s, instagram=%s, tiktok=%s WHERE id=%s',
-            (d.get('whatsapp'), d.get('facebook'), d.get('instagram'), d.get('tiktok'), rows[0]['id']),
+        query('UPDATE redes SET whatsapp=%s, facebook=%s, instagram=%s, tiktok=%s, linkedin=%s WHERE id=%s',
+            (d.get('whatsapp'), d.get('facebook'), d.get('instagram'), d.get('tiktok'), d.get('linkedin'), rows[0]['id']),
             commit=True)
     return jsonify({'ok': True})
 
