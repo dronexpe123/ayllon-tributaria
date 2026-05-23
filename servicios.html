@@ -363,7 +363,7 @@
           ${c.duracion ? `<span style="color:var(--text-mid);align-self:center;">⏱ ${c.duracion}</span>` : ''}
         </div>
         <div style="font-size:1rem;line-height:1.85;color:var(--text-mid);margin-bottom:2rem;">${c.descripcion || ''}</div>
-        <a href="contacto.html" class="btn btn-primary">Inscribirse →</a>
+        <a href="contacto.html?curso=${encodeURIComponent(c.titulo)}" class="btn btn-primary">Inscribirse →</a>
       </div>
     `;
     document.getElementById('btn-volver-curso').addEventListener('click', e => {

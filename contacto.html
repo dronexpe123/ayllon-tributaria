@@ -170,6 +170,7 @@
         <a href="#" class="red-btn red-facebook" id="btn-facebook" target="_blank">📘 Facebook</a>
         <a href="#" class="red-btn red-instagram" id="btn-instagram" target="_blank">📸 Instagram</a>
         <a href="#" class="red-btn red-tiktok" id="btn-tiktok" target="_blank">🎵 TikTok</a>
+        <a href="#" class="red-btn" id="btn-linkedin" target="_blank" style="background:#0077b5;color:white;display:none;">💼 LinkedIn</a>
       </div>
     </div>
 
@@ -274,7 +275,8 @@
       }
       if (r.facebook)  document.getElementById('btn-facebook').href  = r.facebook;
       if (r.instagram) document.getElementById('btn-instagram').href = r.instagram;
-      if (r.tiktok)    document.getElementById('btn-tiktok').href    = r.tiktok;
+      if (r.tiktok)   document.getElementById('btn-tiktok').href   = r.tiktok;
+      if (r.linkedin) { document.getElementById('btn-linkedin').href = r.linkedin; document.getElementById('btn-linkedin').style.display = 'inline-flex'; }
     } catch(e) { console.log('Redes no configuradas aún.'); }
   }
 
@@ -314,6 +316,30 @@
   });
 
   cargarRedes();
+
+  // PRE-SELECCIONAR CURSO DESDE URL
+  const params = new URLSearchParams(window.location.search);
+  const cursoParam = params.get('curso');
+  if (cursoParam) {
+    const select = document.getElementById('servicio');
+    let encontrado = false;
+    for (const opt of select.options) {
+      if (opt.value.toLowerCase().includes('curso') || opt.text.toLowerCase().includes('curso')) {
+        opt.value = `Inscripción — ${cursoParam}`;
+        opt.text  = `Inscripción — ${cursoParam}`;
+        select.value = opt.value;
+        encontrado = true;
+        break;
+      }
+    }
+    if (!encontrado) {
+      const opt = document.createElement('option');
+      opt.value = `Inscripción — ${cursoParam}`;
+      opt.text  = `Inscripción — ${cursoParam}`;
+      select.appendChild(opt);
+      select.value = opt.value;
+    }
+  }
 </script>
 
 </body>
