@@ -106,3 +106,17 @@ export function showToast(msg, type = 'success') {
   requestAnimationFrame(() => t.classList.add('show'));
   setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3000);
 }
+
+export function renderMarkdown(texto) {
+  if (!texto) return '';
+  return texto
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/__(.*?)__/g, '<u>$1</u>')
+    .replace(/_(.*?)_/g, '<em>$1</em>')
+    .split(/\n\n+/)
+    .map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`)
+    .join('');
+}

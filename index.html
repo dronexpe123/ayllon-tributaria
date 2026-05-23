@@ -554,7 +554,7 @@
           <div class="clase-ico">${c.imagen ? `<img src="${c.imagen}" alt="${c.titulo}" style="width:44px;height:44px;object-fit:cover;border-radius:8px;">` : '🎓'}</div>
           <div class="clase-info">
             <h3>${c.titulo} <span class="clase-estado estado-${c.estado || 'activo'}">${c.estado === 'solicitar' ? 'Solicitar' : 'Disponible'}</span></h3>
-            <p>${c.descripcion || ''}</p>
+            <p>${c.resumen || c.descripcion || ''}</p>
             <span class="clase-precio">Bs. ${c.precio || '0'}</span>
           </div>
         </div>

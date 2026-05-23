@@ -201,7 +201,7 @@
   </footer>
 
   <script type="module">
-  import { db, formatDate } from './js/main.js';
+  import { db, formatDate, renderMarkdown } from './js/main.js';
 
   let todosBlogs = [];
 
@@ -272,21 +272,21 @@
       }
 
       let html = '';
-      if (b.contenido)  html += `<div>${b.contenido}</div>`;
+      if (b.contenido)  html += renderMarkdown(b.contenido);
       if (b.imagen_medio) {
         html += `<div class="articulo-img-block">
           <img src="${b.imagen_medio}" alt="Imagen del artículo">
           <p class="articulo-img-caption">${b.imagen_medio_caption || ''}</p>
         </div>`;
       }
-      if (b.contenido2) html += `<div>${b.contenido2}</div>`;
+      if (b.contenido2) html += renderMarkdown(b.contenido2);
       if (b.imagen_final) {
         html += `<div class="articulo-img-block">
           <img src="${b.imagen_final}" alt="Imagen final">
           <p class="articulo-img-caption">${b.imagen_final_caption || ''}</p>
         </div>`;
       }
-      if (b.contenido3) html += `<div>${b.contenido3}</div>`;
+      if (b.contenido3) html += renderMarkdown(b.contenido3);
 
       document.getElementById('art-content').innerHTML = html;
 
