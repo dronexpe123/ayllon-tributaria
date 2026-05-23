@@ -100,6 +100,49 @@
     @media (max-width: 768px) {
       .blogs-grid { grid-template-columns: 1fr; }
     }
+
+    .btn-fav-curso {
+      background: transparent; border: 1px solid rgba(201,168,76,0.3);
+      color: var(--text-mid); padding: 8px 16px; border-radius: 999px;
+      font-size: 0.85rem; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans',sans-serif;
+    }
+    .btn-fav-curso.active { background: rgba(201,168,76,0.15); color: var(--gold); border-color: var(--gold); }
+    .btn-compartir-curso {
+      background: transparent; border: 1px solid rgba(201,168,76,0.3);
+      color: var(--text-mid); padding: 8px 16px; border-radius: 999px;
+      font-size: 0.85rem; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans',sans-serif;
+    }
+    .btn-compartir-curso:hover { background: var(--gold); color: var(--navy); }
+
+    .blog-lista-inner {
+      display: grid; grid-template-columns: 1fr 280px; gap: 2.5rem; align-items: start;
+    }
+    .sidebar-blog {
+      background: var(--white); border-radius: var(--radius-lg);
+      border: 1px solid rgba(201,168,76,0.1); padding: 1.5rem;
+      box-shadow: var(--shadow); position: sticky; top: 90px;
+    }
+    .sidebar-blog h3 {
+      font-family: 'Playfair Display', serif; font-size: 1rem;
+      color: var(--navy); margin-bottom: 1rem;
+      padding-bottom: 0.5rem; border-bottom: 2px solid rgba(201,168,76,0.2);
+    }
+    .fav-blog-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 6px 0; border-bottom: 1px solid rgba(201,168,76,0.08);
+      font-size: 0.83rem; color: var(--text-mid);
+    }
+    .fav-blog-item:last-child { border-bottom: none; }
+    .fav-blog-titulo { cursor: pointer; flex: 1; line-height: 1.4; }
+    .fav-blog-titulo:hover { color: var(--gold); }
+    .fav-blog-remove { cursor: pointer; color: var(--text-light); margin-left: 8px; flex-shrink: 0; }
+    .fav-blog-remove:hover { color: #dc2626; }
+    .sidebar-blog-vacio { font-size: 0.82rem; color: var(--text-light); line-height: 1.5; }
+    @media (max-width: 900px) {
+      .blog-lista-inner { grid-template-columns: 1fr; }
+      .sidebar-blog { position: static; }
+    }
+
   </style>
 </head>
 <body>
@@ -110,14 +153,15 @@
     <a href="index.html" class="nav-logo">
       <img src="img/logo.png" alt="Ayllón Tributaria" style="height:38px; width:auto; object-fit:contain;">
       <div class="nav-logo-text">
-        Ayllón
-        <span class="nav-logo-sub">Tributaria</span>
+        AYLLÓN
+        <span class="nav-logo-sub">CONTABILIDAD • TRIBUTACION • AUDITORÍA • JURÍDICO</span>
       </div>
     </a>
     <ul class="nav-links">
       <li><a href="index.html">Inicio</a></li>
       <li><a href="servicios.html">Servicios</a></li>
       <li><a href="blog.html">Blog</a></li>
+      <li><a href="favoritos.html">⭐ Favoritos</a></li>
       <li><a href="contacto.html" class="nav-cta">Contacto</a></li>
     </ul>
     <button class="nav-hamburger" aria-label="Menú">
@@ -140,8 +184,19 @@
         <button class="filtro-btn" data-cat="Auditoría">Auditoría</button>
         <button class="filtro-btn" data-cat="Finanzas">Finanzas</button>
       </div>
-      <div class="blogs-grid" id="blogs-grid">
-        <div class="blog-empty">Cargando artículos...</div>
+      <div class="blog-lista-inner">
+        <div class="blogs-grid" id="blogs-grid">
+          <div class="blog-empty">Cargando artículos...</div>
+        </div>
+        <aside>
+          <div class="sidebar-blog">
+            <h3>⭐ Mis favoritos</h3>
+            <div id="blogs-favoritos-lista">
+              <p class="sidebar-blog-vacio">Guarda artículos tocando ⭐ en cada uno.</p>
+            </div>
+            <a href="favoritos.html" style="display:block;margin-top:1rem;font-size:0.82rem;color:var(--gold);text-decoration:none;font-weight:600;">Ver todos los favoritos →</a>
+          </div>
+        </aside>
       </div>
     </div>
   </div>
@@ -173,7 +228,7 @@
           <img src="img/logo.png" alt="Ayllón Tributaria" style="height:38px; width:auto; object-fit:contain;">
           <div class="nav-logo-text" style="color:var(--white)">Ayllón<span class="nav-logo-sub">Tributaria</span></div>
         </a>
-        <p>Asesoría contable, tributaria y de auditoría en La Paz, Bolivia.</p>
+        <p>Franklin Rolando Ayllón Pabón · Contador Tributarista, Auditor Certificado y Abogado. Asesoría contable, tributaria, de auditoría y jurídica para emprendedores y empresas bolivianas.</p>
       </div>
       <div class="footer-col">
         <h4>Navegación</h4>
@@ -229,7 +284,13 @@
         </div>
         <div class="blog-card-body">
           <p class="blog-card-cat">${b.categoria || 'Tributación'}</p>
-          <h3 class="blog-card-title">${b.titulo}</h3>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:0.75rem;" onclick="event.stopPropagation()">
+            <h3 class="blog-card-title" style="margin-bottom:0;">${b.titulo}</h3>
+            <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+              <button class="btn-fav-curso ${getBlogsFavs().some(f=>f.id===b.id)?'active':''}" onclick="toggleBlogFav('${b.id}','${b.titulo.replace(/'/g,"\\'")}',this)">⭐ Guardar</button>
+              <button class="btn-compartir-curso" onclick="compartirBlog('${b.id}','${encodeURIComponent(b.titulo)}')">🔗 Compartir</button>
+            </div>
+          </div>
           <p class="blog-card-excerpt">${b.resumen || ''}</p>
           <div class="blog-card-footer">
             <span>${formatDate(b.fecha)}</span>
@@ -290,6 +351,20 @@
 
       document.getElementById('art-content').innerHTML = html;
 
+      // BOTONES EN DETALLE
+      const meta = document.getElementById('articulo-wrap').querySelector('.articulo-meta');
+      const btnExistentes = document.getElementById('art-botones-detalle');
+      if (btnExistentes) btnExistentes.remove();
+      const divBtns = document.createElement('div');
+      divBtns.id = 'art-botones-detalle';
+      divBtns.style.cssText = 'display:flex;flex-direction:row;gap:10px;margin-top:1.5rem;flex-wrap:wrap;';
+      const esFavArt = getBlogsFavs().some(f => f.id === id);
+      divBtns.innerHTML = `
+        <button class="btn-fav-curso ${esFavArt ? 'active' : ''}" id="btn-fav-art" style="font-size:1rem;padding:10px 22px;width:fit-content;" onclick="toggleBlogFavDetalle('${b.id}','${b.titulo.replace(/'/g,"\\'")}',this)">⭐ ${esFavArt ? 'Guardado' : 'Guardar artículo'}</button>
+        <button class="btn-compartir-curso" style="background:var(--gold);color:var(--navy);border-color:var(--gold);font-size:1rem;padding:10px 22px;width:fit-content;" onclick="compartirBlog('${b.id}','${encodeURIComponent(b.titulo)}')">🔗 Compartir artículo</button>
+      `;
+      meta.after(divBtns);
+
       document.getElementById('lista-wrap').classList.add('hidden');
       document.getElementById('articulo-wrap').classList.add('visible');
       window.scrollTo(0, 0);
@@ -314,7 +389,67 @@
   const idParam = params.get('id');
   if (idParam) abrirArticulo(idParam);
 
+  function getBlogsFavs() {
+    try { return JSON.parse(localStorage.getItem('blogs_favs') || '[]'); } catch { return []; }
+  }
+  function saveBlogsFavs(favs) { localStorage.setItem('blogs_favs', JSON.stringify(favs)); }
+
+  window.toggleBlogFav = function(id, titulo, btn) {
+    let favs = getBlogsFavs();
+    const idx = favs.findIndex(f => f.id === id);
+    if (idx >= 0) favs.splice(idx, 1);
+    else favs.unshift({ id, titulo });
+    saveBlogsFavs(favs);
+    const esFav = favs.some(f => f.id === id);
+    btn.textContent = esFav ? '⭐ Guardado' : '⭐ Guardar';
+    btn.classList.toggle('active', esFav);
+    renderBlogsFavSidebar();
+  };
+
+  window.compartirBlog = function(id, tituloEnc) {
+    const url = `${window.location.origin}/blog.html?id=${id}`;
+    if (navigator.share) {
+      navigator.share({ title: decodeURIComponent(tituloEnc) + ' — Ayllón Tributaria', url });
+    } else {
+      navigator.clipboard.writeText(url).then(() => alert('¡Enlace copiado al portapapeles!'));
+    }
+  };
+
+  window.toggleBlogFavDetalle = function(id, titulo, btn) {
+    let favs = getBlogsFavs();
+    const idx = favs.findIndex(f => f.id === id);
+    if (idx >= 0) favs.splice(idx, 1);
+    else favs.unshift({ id, titulo });
+    saveBlogsFavs(favs);
+    const esFav = favs.some(f => f.id === id);
+    btn.textContent = esFav ? '⭐ Guardado' : '⭐ Guardar artículo';
+    btn.classList.toggle('active', esFav);
+    renderBlogsFavSidebar();
+  };
+
+  function renderBlogsFavSidebar() {
+    const el = document.getElementById('blogs-favoritos-lista');
+    if (!el) return;
+    const favs = getBlogsFavs();
+    if (favs.length === 0) {
+      el.innerHTML = '<p class="sidebar-blog-vacio">Guarda artículos tocando ⭐ en cada uno.</p>';
+      return;
+    }
+    el.innerHTML = favs.map(f => `
+      <div class="fav-blog-item">
+        <span class="fav-blog-titulo" onclick="abrirArticulo('${f.id}')">${f.titulo}</span>
+        <span class="fav-blog-remove" onclick="quitarBlogFavSidebar('${f.id}')">✕</span>
+      </div>
+    `).join('');
+  }
+
+  window.quitarBlogFavSidebar = function(id) {
+    saveBlogsFavs(getBlogsFavs().filter(f => f.id !== id));
+    renderBlogsFavSidebar();
+  };
+
   cargarBlogs();
+  renderBlogsFavSidebar();
 </script>
 
 </body>

@@ -257,6 +257,21 @@
       .franklin-mini-grid { grid-template-columns: 1fr; }
       .hero-stats { gap: 1.5rem; }
     }
+
+    .btn-compartir-curso {
+      background: transparent; border: 1px solid rgba(201,168,76,0.3);
+      color: var(--text-mid); padding: 8px 16px; border-radius: 999px;
+      font-size: 0.85rem; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans',sans-serif;
+    }
+    .btn-compartir-curso:hover { background: var(--gold); color: var(--navy); }
+    
+    .btn-fav-curso {
+      background: transparent; border: 1px solid rgba(201,168,76,0.3);
+      color: var(--text-mid); padding: 8px 16px; border-radius: 999px;
+      font-size: 0.85rem; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans',sans-serif;
+    }
+    .btn-fav-curso.active { background: rgba(201,168,76,0.15); color: var(--gold); border-color: var(--gold); }
+
   </style>
 </head>
 <body>
@@ -267,14 +282,15 @@
     <a href="index.html" class="nav-logo">
       <img src="img/logo.png" alt="Ayllón Tributaria" style="height:38px; width:auto; object-fit:contain;">
       <div class="nav-logo-text">
-        Ayllón
-        <span class="nav-logo-sub">Tributaria</span>
+        AYLLÓN
+        <span class="nav-logo-sub">CONTABILIDAD • TRIBUTACION • AUDITORÍA • JURÍDICO</span>
       </div>
     </a>
     <ul class="nav-links">
       <li><a href="index.html">Inicio</a></li>
       <li><a href="servicios.html">Servicios</a></li>
       <li><a href="blog.html">Blog</a></li>
+      <li><a href="favoritos.html">⭐ Favoritos</a></li>
       <li><a href="contacto.html" class="nav-cta">Contacto</a></li>
     </ul>
     <button class="nav-hamburger" aria-label="Menú">
@@ -411,16 +427,17 @@
           </div>
         </div>
         <div class="franklin-texto animate-up">
-          <p class="section-label">Sobre Franklin</p>
+          <p class="section-label">Contador Franklin Ayllón</p>
           <h2 class="section-title">Contador con experiencia<br>en empresas <span>públicas y privadas</span></h2>
           <div class="section-divider"></div>
-          <p>Franklin Rolando Ayllón Pabón es Contador Tributarista y Auditor Certificado con más de 20 años de trayectoria en Bolivia. Ha trabajado en empresas tanto del sector público como privado, acumulando experiencia en una amplia variedad de situaciones tributarias y contables.</p>
-          <p>Su especialidad es acompañar a emprendedores y empresas a ordenar su situación fiscal, evitar multas y tomar decisiones con información clara.</p>
+          <p>Franklin Rolando Ayllón Pabón es Contador, Tributarista, Auditor Certificado y Abogado con más de 20 años de trayectoria en Bolivia. Ha trabajado en empresas tanto del sector público como privado, acumulando experiencia en contabilidad, tributación, auditoría y derecho civil.</p>
+          <p>Acompaña a emprendedores y empresas a ordenar su situación contable y fiscal, resolver trámites legales y tomar decisiones con información clara.</p>
           <div class="franklin-mini-grid">
-            <div class="franklin-mini"><strong>Tributación</strong>Declaraciones, RC-IVA, IVA, IT, IUE</div>
-            <div class="franklin-mini"><strong>Auditoría</strong>Interna y externa</div>
+            <div class="franklin-mini"><strong>Contabilidad</strong>Registro, control y reportes financieros para empresas y negocios</div>
+            <div class="franklin-mini"><strong>Tributación</strong>Declaraciones, RC-IVA, IVA, IT, IUE ante el SIN</div>
+            <div class="franklin-mini"><strong>Auditoría</strong>Interna y externa de estados financieros</div>
             <div class="franklin-mini"><strong>Regularización</strong>Multas y mora ante el SIN</div>
-            <div class="franklin-mini"><strong>Enseñanza</strong>Clases virtuales individuales y grupales</div>
+            <div class="franklin-mini"><strong>Derecho Civil</strong>Asesoría y gestión de trámites legales</div>
           </div>
           <a href="servicios.html" class="btn btn-primary">Ver todos los servicios</a>
         </div>
@@ -469,7 +486,7 @@
           <img src="img/logo.png" alt="Ayllón Tributaria" style="height:38px; width:auto; object-fit:contain;">
           <div class="nav-logo-text" style="color:var(--white)">Ayllón<span class="nav-logo-sub">Tributaria</span></div>
         </a>
-        <p>Franklin Rolando Ayllón Pabón · Contador Tributarista y Auditor Certificado. Asesoría tributaria profesional para emprendedores y empresas bolivianas.</p>
+        <p>Franklin Rolando Ayllón Pabón · Contador Tributarista, Auditor Certificado y Abogado. Asesoría contable, tributaria, de auditoría y jurídica para emprendedores y empresas bolivianas.</p>
       </div>
       <div class="footer-col">
         <h4>Navegación</h4>
@@ -500,7 +517,7 @@
   <a href="https://wa.me/59168064859" class="wa-float" title="WhatsApp">💬</a>
 
   <script type="module">
-  import { db, formatDate } from './js/main.js';
+  import { db, formatDate, renderMarkdown } from './js/main.js';
 
   async function cargarFoto() {
     try {
@@ -530,7 +547,12 @@
           </div>
           <div class="blog-prev-body">
             <p class="blog-prev-cat">${b.categoria || 'Tributación'}</p>
-            <h3>${b.titulo}</h3>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;" onclick="event.stopPropagation()">
+              <h3 style="margin-bottom:0;">${b.titulo}</h3>
+              <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+                <button class="btn-compartir-curso" onclick="navigator.share?navigator.share({title:'${b.titulo.replace(/'/g,"\\'")} — Ayllón Tributaria',url:'blog.html?id=${b.id}'}):navigator.clipboard.writeText('blog.html?id=${b.id}').then(()=>alert('¡Enlace copiado!'))">🔗 Compartir</button>
+              </div>
+            </div>
             <p>${b.resumen || ''}</p>
             <span class="blog-prev-leer">Leer artículo →</span>
           </div>
@@ -549,12 +571,19 @@
         cont.innerHTML = `<div class="clase-card"><div class="clase-ico">🎓</div><div class="clase-info"><h3>Clases próximamente</h3><p>Franklin está preparando el contenido. Escríbenos para más información.</p></div></div>`;
         return;
       }
+      window._cursosIndexData = cursos;
       cont.innerHTML = cursos.slice(0, 4).map(c => `
-        <div class="clase-card animate-up">
+        <div class="clase-card animate-up" onclick="verCursoIndex(${c.id})" style="cursor:pointer;">
           <div class="clase-ico">${c.imagen ? `<img src="${c.imagen}" alt="${c.titulo}" style="width:44px;height:44px;object-fit:cover;border-radius:8px;">` : '🎓'}</div>
           <div class="clase-info">
-            <h3>${c.titulo} <span class="clase-estado estado-${c.estado || 'activo'}">${c.estado === 'solicitar' ? 'Solicitar' : 'Disponible'}</span></h3>
-            <p>${c.resumen || c.descripcion || ''}</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px;" onclick="event.stopPropagation()">
+              <h3 style="margin-bottom:0;">${c.titulo} <span class="clase-estado estado-${c.estado || 'activo'}">${c.estado === 'solicitar' ? 'Solicitar' : 'Disponible'}</span></h3>
+              <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+                <button class="btn-fav-curso" onclick="toggleCursoFavIndex(${c.id},'${c.titulo.replace(/'/g,"\\'")}',this)">⭐ Guardar</button>
+                <button class="btn-compartir-curso" onclick="navigator.share?navigator.share({title:'${c.titulo.replace(/'/g,"\\'")} — Ayllón Tributaria',url:'servicios.html?curso=${c.id}'}):navigator.clipboard.writeText('servicios.html?curso=${c.id}').then(()=>alert('¡Enlace copiado!'))">🔗 Compartir</button>
+              </div>
+            </div>
+            <div style="font-size:0.82rem;color:var(--text-mid);line-height:1.5;margin-bottom:10px;">${renderMarkdown(c.resumen || c.descripcion || '')}</div>
             <span class="clase-precio">Bs. ${c.precio || '0'}</span>
           </div>
         </div>
@@ -563,6 +592,26 @@
       cont.innerHTML = `<div class="clase-card"><div class="clase-ico">🎓</div><div class="clase-info"><h3>Error al cargar clases</h3></div></div>`;
     }
   }
+
+  function getCursosFavsIndex() {
+    try { return JSON.parse(localStorage.getItem('cursos_favs') || '[]'); } catch { return []; }
+  }
+  window.toggleCursoFavIndex = function(id, titulo, btn) {
+    let favs = getCursosFavsIndex();
+    const idx = favs.findIndex(f => f.id === id);
+    if (idx >= 0) favs.splice(idx, 1);
+    else favs.unshift({ id, titulo });
+    localStorage.setItem('cursos_favs', JSON.stringify(favs));
+    const esFav = favs.some(f => f.id === id);
+    btn.textContent = esFav ? '⭐ Guardado' : '⭐ Guardar';
+    btn.classList.toggle('active', esFav);
+  };
+
+  window.verCursoIndex = function(id) {
+    const c = (window._cursosIndexData || []).find(x => x.id === id);
+    if (!c) return;
+    window.location.href = `servicios.html?curso=${c.id}`;
+  };
 
   (async () => {
     cargarFoto();

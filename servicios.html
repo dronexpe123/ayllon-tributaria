@@ -100,6 +100,36 @@
       .servicios-grid { grid-template-columns: 1fr; }
       .cursos-grid { grid-template-columns: 1fr; }
     }
+
+    .sidebar-card-srv {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.2);
+      border-radius: var(--radius-lg); padding: 1.5rem;
+    }
+    .fav-curso-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 6px 0; border-bottom: 1px solid rgba(201,168,76,0.1);
+      font-size: 0.83rem; color: var(--text-light);
+    }
+    .fav-curso-item:last-child { border-bottom: none; }
+    .fav-curso-titulo { cursor: pointer; flex: 1; }
+    .fav-curso-titulo:hover { color: var(--gold); }
+    .fav-curso-remove { cursor: pointer; color: var(--text-light); margin-left: 8px; }
+    .btn-fav-curso {
+      background: transparent; border: 1px solid rgba(201,168,76,0.3);
+      color: var(--text-light); padding: 6px 14px; border-radius: 999px;
+      font-size: 0.78rem; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans',sans-serif;
+    }
+    .btn-fav-curso.active { background: rgba(201,168,76,0.15); color: var(--gold); border-color: var(--gold); }
+    .btn-compartir-curso {
+      background: transparent; border: 1px solid rgba(201,168,76,0.3);
+      color: var(--text-light); padding: 6px 14px; border-radius: 999px;
+      font-size: 0.78rem; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans',sans-serif;
+    }
+    .btn-compartir-curso:hover { background: var(--gold); color: var(--navy); }
+    @media (max-width: 900px) {
+      .cursos-inner > div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+    }
+
   </style>
 </head>
 <body>
@@ -110,14 +140,15 @@
     <a href="index.html" class="nav-logo">
       <img src="img/logo.png" alt="Ayllón Tributaria" style="height:38px; width:auto; object-fit:contain;">
       <div class="nav-logo-text">
-        Ayllón
-        <span class="nav-logo-sub">Tributaria</span>
+        AYLLÓN
+        <span class="nav-logo-sub">CONTABILIDAD • TRIBUTACION • AUDITORÍA • JURÍDICO</span>
       </div>
     </a>
     <ul class="nav-links">
       <li><a href="index.html">Inicio</a></li>
       <li><a href="servicios.html">Servicios</a></li>
       <li><a href="blog.html">Blog</a></li>
+      <li><a href="favoritos.html">⭐ Favoritos</a></li>
       <li><a href="contacto.html" class="nav-cta">Contacto</a></li>
     </ul>
     <button class="nav-hamburger" aria-label="Menú">
@@ -129,7 +160,7 @@
   <div class="page-hero" style="position:relative; overflow:hidden;">
     <img src="img/logo.png" alt="" aria-hidden="true" style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:420px; opacity:0.07; pointer-events:none; user-select:none;">
     <h1>Nuestros <span>Servicios</span></h1>
-    <p>Soluciones profesionales en tributación, contabilidad y auditoría para personas y empresas en Bolivia.</p>
+    <p>Soluciones profesionales en contabilidad, tributación, auditoría y derecho civil para personas y empresas en Bolivia.</p>
   </div>
 
   <!-- SERVICIOS TRIBUTACION -->
@@ -286,6 +317,48 @@
     </div>
   </section>
 
+  <!-- SERVICIOS DERECHO CIVIL -->
+  <section class="section" style="padding-top:0;">
+    <div class="seccion-header animate-up">
+      <div class="seccion-header-icon">⚖️</div>
+      <div>
+        <h2>Derecho Civil</h2>
+        <p>Asesoría y gestión de trámites legales</p>
+      </div>
+    </div>
+    <div class="servicios-grid">
+
+      <div class="servicio-card animate-up">
+        <div class="servicio-numero">09</div>
+        <div class="servicio-icon">📝</div>
+        <h3>Contratos y Documentos Legales</h3>
+        <p>Elaboración y revisión de contratos civiles, acuerdos comerciales y documentos legales conforme a la legislación boliviana.</p>
+        <ul class="servicio-lista">
+          <li>Contratos de compraventa</li>
+          <li>Contratos de arrendamiento</li>
+          <li>Acuerdos entre partes</li>
+          <li>Revisión de documentos legales</li>
+        </ul>
+        <span class="servicio-tag tag-secundario">Derecho Civil</span>
+      </div>
+
+      <div class="servicio-card animate-up">
+        <div class="servicio-numero">10</div>
+        <div class="servicio-icon">🏛️</div>
+        <h3>Trámites y Gestiones Legales</h3>
+        <p>Acompañamiento y gestión de trámites ante instituciones públicas y privadas para personas y empresas.</p>
+        <ul class="servicio-lista">
+          <li>Trámites ante Derechos Reales</li>
+          <li>Gestiones notariales</li>
+          <li>Asesoría en sucesiones</li>
+          <li>Consultas legales generales</li>
+        </ul>
+        <span class="servicio-tag tag-secundario">Derecho Civil</span>
+      </div>
+
+    </div>
+  </section>
+
   <!-- CURSOS -->
   <div id="cursos-section">
   <section class="cursos-wrap">
@@ -293,8 +366,29 @@
       <p class="section-label animate-up">Formación profesional</p>
       <h2 class="section-title animate-up">Cursos <span style="color:var(--gold)">disponibles</span></h2>
       <div class="section-divider animate-up"></div>
-      <div class="cursos-grid" id="cursos-container">
-        <div class="curso-empty">Cargando cursos...</div>
+      <div style="display:grid; grid-template-columns:1fr 300px; gap:2.5rem; align-items:start; margin-top:2rem;">
+        <div class="cursos-grid" id="cursos-container" style="margin-top:0;">
+          <div class="curso-empty">Cargando cursos...</div>
+        </div>
+        <!-- SIDEBAR CURSOS -->
+        <aside>
+          <div class="sidebar-card-srv">
+            <h3 style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--white);margin-bottom:1rem;">Sobre Franklin</h3>
+            <div style="text-align:center;">
+              <div id="srv-sidebar-avatar" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--navy);margin:0 auto 0.75rem;">FA</div>
+              <div style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;color:var(--white);margin-bottom:3px;">Franklin R. Ayllón Pabón</div>
+              <div style="font-size:0.78rem;color:var(--text-light);margin-bottom:0.75rem;">Contador · Tributarista · Auditor · Abogado</div>
+              <p style="font-size:0.82rem;color:var(--text-light);line-height:1.5;margin-bottom:1rem;">Más de 20 años de experiencia en contabilidad, tributación, auditoría y derecho civil en Bolivia.</p>
+              <a href="https://wa.me/59168064859" class="btn btn-primary" style="font-size:0.85rem;padding:10px 16px;display:block;">💬 Consulta gratuita</a>
+            </div>
+          </div>
+          <div class="sidebar-card-srv" style="margin-top:1rem;">
+            <h3 style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--white);margin-bottom:1rem;">⭐ Mis favoritos</h3>
+            <div id="cursos-favoritos-lista">
+              <p style="font-size:0.82rem;color:var(--text-light);">Guarda cursos tocando ⭐ en cada uno.</p>
+            </div>
+          </div>
+        </aside>
       </div>
     </div>
   </section>
@@ -317,7 +411,7 @@
           <img src="img/logo.png" alt="Ayllón Tributaria" style="height:38px; width:auto; object-fit:contain;">
           <div class="nav-logo-text" style="color:var(--white)">Ayllón<span class="nav-logo-sub">Tributaria</span></div>
         </a>
-        <p>Asesoría contable, tributaria y de auditoría en La Paz, Bolivia.</p>
+        <p>Franklin Rolando Ayllón Pabón · Contador Tributarista, Auditor Certificado y Abogado. Asesoría contable, tributaria, de auditoría y jurídica para emprendedores y empresas bolivianas.</p>
       </div>
       <div class="footer-col">
         <h4>Navegación</h4>
@@ -345,12 +439,49 @@
   </footer>
 
   <script type="module">
-  import { db } from './js/main.js';
+  import { db, renderMarkdown } from './js/main.js';
 
   // VISTA LISTA / DETALLE
+  function getCursosFavs() {
+    try { return JSON.parse(localStorage.getItem('cursos_favs') || '[]'); } catch { return []; }
+  }
+  function saveCursosFavs(favs) { localStorage.setItem('cursos_favs', JSON.stringify(favs)); }
+  function renderCursosFavSidebar() {
+    const el = document.getElementById('cursos-favoritos-lista');
+    if (!el) return;
+    const favs = getCursosFavs();
+    if (favs.length === 0) {
+      el.innerHTML = '<p style="font-size:0.82rem;color:var(--text-light);">Guarda cursos tocando ⭐ en cada uno.</p>';
+      return;
+    }
+    el.innerHTML = favs.map(f => `
+      <div class="fav-curso-item">
+        <span class="fav-curso-titulo" onclick="verCurso(${f.id})">${f.titulo}</span>
+        <span class="fav-curso-remove" onclick="quitarCursoFav(${f.id})">✕</span>
+      </div>
+    `).join('');
+  }
+  window.quitarCursoFav = function(id) {
+    saveCursosFavs(getCursosFavs().filter(f => f.id !== id));
+    renderCursosFavSidebar();
+  };
+
+window.toggleCursoFavCard = function(id, titulo, btn) {
+  let favs = getCursosFavs();
+  const idx = favs.findIndex(f => f.id === id);
+  if (idx >= 0) favs.splice(idx, 1);
+  else favs.unshift({ id, titulo });
+  saveCursosFavs(favs);
+  renderCursosFavSidebar();
+  const esFav = favs.some(f => f.id === id);
+  btn.textContent = esFav ? '⭐ Guardado' : '⭐ Guardar';
+  btn.classList.toggle('active', esFav);
+};
+
   function mostrarDetalle(c) {
     document.querySelectorAll('body > *:not(#curso-detalle):not(nav)').forEach(el => el.style.display = 'none');
     const det = document.getElementById('curso-detalle');
+    const esFav = getCursosFavs().some(f => f.id === c.id);
     det.style.display = 'block';
     det.innerHTML = `
       <div style="max-width:900px; margin:0 auto; padding: 60px 2rem;">
@@ -358,14 +489,39 @@
         <img src="${c.imagen}" alt="${c.titulo}" style="width:100%;max-height:420px;object-fit:cover;border-radius:var(--radius-lg);margin-bottom:2rem;">
         <span class="curso-badge">${c.modalidad || 'Presencial'}</span>
         <h1 style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--navy);margin:1rem 0 0.5rem;">${c.titulo}</h1>
-        <div style="display:flex;gap:1.5rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+        <div style="display:flex;gap:1.5rem;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center;">
           <span style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);font-weight:700;">Bs. ${c.precio || '0'}</span>
-          ${c.duracion ? `<span style="color:var(--text-mid);align-self:center;">⏱ ${c.duracion}</span>` : ''}
+          ${c.duracion ? `<span style="color:var(--text-mid);">⏱ ${c.duracion}</span>` : ''}
+          <button class="btn-fav-curso ${esFav ? 'active' : ''}" id="btn-fav-curso-det" onclick="toggleCursoFav(${c.id},'${c.titulo.replace(/'/g,"\\'")}')">⭐ ${esFav ? 'Guardado' : 'Guardar'}</button>
+          <button class="btn-compartir-curso" style="background:var(--gold);color:var(--navy);border-color:var(--gold);font-size:1rem;padding:10px 22px;" onclick="compartirCurso('${encodeURIComponent(c.titulo)}')">🔗 Compartir</button>
         </div>
-        <div style="font-size:1rem;line-height:1.85;color:var(--text-mid);margin-bottom:2rem;">${c.descripcion || ''}</div>
+        <div style="font-size:1rem;line-height:1.85;color:var(--text-mid);margin-bottom:2rem;">${renderMarkdown(c.descripcion || '')}</div>
         <a href="contacto.html?curso=${encodeURIComponent(c.titulo)}" class="btn btn-primary">Inscribirse →</a>
       </div>
     `;
+    
+    window.toggleCursoFav = function(id, titulo) {
+    let favs = getCursosFavs();
+    const idx = favs.findIndex(f => f.id === id);
+    if (idx >= 0) favs.splice(idx, 1);
+    else favs.unshift({ id, titulo });
+    saveCursosFavs(favs);
+    renderCursosFavSidebar();
+    const btn = document.getElementById('btn-fav-curso-det');
+    const esFav = favs.some(f => f.id === id);
+    if (btn) { btn.textContent = esFav ? '⭐ Guardado' : '⭐ Guardar'; btn.classList.toggle('active', esFav); }
+  };
+  window.compartirCurso = function(tituloEnc, id) {
+    const url = id
+      ? `${window.location.origin}/servicios.html?curso=${id}`
+      : window.location.href;
+    if (navigator.share) {
+      navigator.share({ title: decodeURIComponent(tituloEnc) + ' — Ayllón Tributaria', url });
+    } else {
+      navigator.clipboard.writeText(url).then(() => alert('¡Enlace copiado al portapapeles!'));
+    }
+  };
+
     document.getElementById('btn-volver-curso').addEventListener('click', e => {
       e.preventDefault();
       det.style.display = 'none';
@@ -387,8 +543,14 @@
         <div class="curso-card" onclick="verCurso(${c.id})" style="cursor:pointer;">
           ${c.imagen ? `<div style="width:100%;height:180px;border-radius:var(--radius);overflow:hidden;margin-bottom:1rem;"><img src="${c.imagen}" alt="${c.titulo}" style="width:100%;height:100%;object-fit:cover;"></div>` : ''}
           <span class="curso-badge">${c.modalidad || 'Presencial'}</span>
-          <h3>${c.titulo}</h3>
-          <p>${c.resumen || c.descripcion || ''}</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:0.75rem;">
+            <h3 style="margin-bottom:0;">${c.titulo}</h3>
+            <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;" onclick="event.stopPropagation()">
+              <button class="btn-fav-curso ${getCursosFavs().some(f=>f.id===c.id)?'active':''}" onclick="toggleCursoFavCard(${c.id},'${c.titulo.replace(/'/g,"\\'")}',this)">⭐ Guardar</button>
+              <button class="btn-compartir-curso" onclick="compartirCurso('${encodeURIComponent(c.titulo)}',${c.id})">🔗 Compartir</button>
+            </div>
+          </div>
+          <div style="color:var(--text-light);font-size:0.88rem;line-height:1.6;margin-bottom:1.25rem;">${renderMarkdown(c.resumen || c.descripcion || '')}</div>
           <div class="curso-meta">
             <div class="curso-precio">
               Bs. ${c.precio || '0'}
@@ -410,8 +572,26 @@
     if (c) mostrarDetalle(c);
   };
 
+  async function cargarFotoSidebarSrv() {
+    try {
+      const perfil = await db.getPerfil();
+      if (perfil && perfil.foto) {
+        const av = document.getElementById('srv-sidebar-avatar');
+        if (av) av.outerHTML = `<img src="${perfil.foto}" alt="Franklin Ayllón" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);margin:0 auto 0.75rem;display:block;">`;
+      }
+    } catch(e) {}
+  }
+
   (async () => {
     await cargarCursos();
+    cargarFotoSidebarSrv();
+    renderCursosFavSidebar();
+    const params = new URLSearchParams(window.location.search);
+    const cursoId = params.get('curso');
+    if (cursoId) {
+      const c = (window._cursosData || []).find(x => String(x.id) === String(cursoId));
+      if (c) mostrarDetalle(c);
+    }
     document.querySelectorAll('.animate-up').forEach(el => el.classList.add('visible'));
   })();
 </script>

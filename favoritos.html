@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis Favoritos | Ayllón Tributaria</title>
+  <meta name="description" content="Tus blogs y cursos guardados de Ayllón Tributaria.">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .favs-layout { max-width: 1200px; margin: 0 auto; padding: 60px 2rem; }
+    .favs-seccion { margin-bottom: 4rem; }
+    .favs-seccion-titulo {
+      font-family: 'Playfair Display', serif; font-size: 1.5rem;
+      font-weight: 700; color: var(--navy); margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem; border-bottom: 2px solid rgba(201,168,76,0.2);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .favs-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .fav-card {
+      background: var(--white); border-radius: var(--radius-lg);
+      border: 1px solid rgba(201,168,76,0.1); padding: 1.5rem;
+      box-shadow: var(--shadow); transition: transform 0.3s, box-shadow 0.3s;
+      display: flex; flex-direction: column; gap: 0.75rem;
+    }
+    .fav-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-gold); }
+    .fav-card-titulo {
+      font-family: 'Playfair Display', serif; font-size: 1rem;
+      font-weight: 700; color: var(--navy); cursor: pointer; line-height: 1.4;
+    }
+    .fav-card-titulo:hover { color: var(--gold); }
+    .fav-card-acciones { display: flex; gap: 8px; margin-top: auto; }
+    .btn-fav-ir {
+      background: var(--gold); color: var(--navy);
+      border: none; padding: 8px 16px; border-radius: 999px;
+      font-size: 0.85rem; font-weight: 600; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+      text-decoration: none; display: inline-flex; align-items: center;
+    }
+    .btn-fav-ir:hover { background: var(--gold-light); }
+    .btn-fav-quitar {
+      background: transparent; border: 1px solid rgba(201,168,76,0.3);
+      color: var(--text-mid); padding: 8px 16px; border-radius: 999px;
+      font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .btn-fav-quitar:hover { background: #fee2e2; color: #dc2626; border-color: #dc2626; }
+    .favs-vacio {
+      color: var(--text-light); font-size: 0.95rem; padding: 2rem 0;
+    }
+    @media (max-width: 600px) {
+      .favs-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <img src="img/logo.png" alt="" aria-hidden="true" class="logo-watermark">
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <img src="img/logo.png" alt="Ayllón Tributaria" style="height:38px; width:auto; object-fit:contain;">
+      <div class="nav-logo-text">
+        AYLLÓN
+        <span class="nav-logo-sub">CONTABILIDAD • TRIBUTACION • AUDITORÍA • JURÍDICO</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="servicios.html">Servicios</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="favoritos.html" class="active">⭐ Favoritos</a></li>
+      <li><a href="contacto.html" class="nav-cta">Contacto</a></li>
+    </ul>
+    <button class="nav-hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <div class="page-hero" style="position:relative; overflow:hidden;">
+    <img src="img/logo.png" alt="" aria-hidden="true" style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:420px; opacity:0.07; pointer-events:none; user-select:none;">
+    <h1>⭐ Mis <span>Favoritos</span></h1>
+    <p>Tus blogs y cursos guardados, siempre a mano.</p>
+  </div>
+
+  <div class="favs-layout">
+
+    <!-- BLOGS GUARDADOS -->
+    <div class="favs-seccion">
+      <div class="favs-seccion-titulo">📚 Blogs guardados</div>
+      <div class="favs-grid" id="favs-blogs-grid">
+        <p class="favs-vacio">Cargando...</p>
+      </div>
+    </div>
+
+    <!-- CURSOS GUARDADOS -->
+    <div class="favs-seccion">
+      <div class="favs-seccion-titulo">🎓 Cursos guardados</div>
+      <div class="favs-grid" id="favs-cursos-grid">
+        <p class="favs-vacio">Cargando...</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer style="position:relative; overflow:hidden;">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <img src="img/logo.png" alt="Ayllón Tributaria" style="height:38px; width:auto; object-fit:contain;">
+          <div class="nav-logo-text" style="color:var(--white)">Ayllón<span class="nav-logo-sub">Tributaria</span></div>
+        </a>
+        <p>Franklin Rolando Ayllón Pabón · Contador Tributarista, Auditor Certificado y Abogado. Asesoría contable, tributaria, de auditoría y jurídica para emprendedores y empresas bolivianas.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="favoritos.html">⭐ Favoritos</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="servicios.html">Tributación</a></li>
+          <li><a href="servicios.html">Contabilidad</a></li>
+          <li><a href="servicios.html">Auditoría</a></li>
+          <li><a href="servicios.html">Derecho Civil</a></li>
+          <li><a href="servicios.html">Cursos</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 <span>Ayllón Tributaria</span>. Todos los derechos reservados.</p>
+      <p>La Paz, Bolivia</p>
+    </div>
+  </footer>
+
+  <script type="module">
+  import { db } from './js/main.js';
+
+  function getBlogsFavs() {
+    try { return JSON.parse(localStorage.getItem('blogs_favs') || '[]'); } catch { return []; }
+  }
+  function getCursosFavs() {
+    try { return JSON.parse(localStorage.getItem('cursos_favs') || '[]'); } catch { return []; }
+  }
+  function saveBlogsFavs(favs) { localStorage.setItem('blogs_favs', JSON.stringify(favs)); }
+  function saveCursosFavs(favs) { localStorage.setItem('cursos_favs', JSON.stringify(favs)); }
+
+  async function renderFavsBlogs() {
+    const grid = document.getElementById('favs-blogs-grid');
+    const favs = getBlogsFavs();
+    if (favs.length === 0) {
+      grid.innerHTML = '<p class="favs-vacio">No tienes blogs guardados aún. Explora el <a href="blog.html" style="color:var(--gold)">blog</a> y guarda los que más te interesen.</p>';
+      return;
+    }
+    try {
+      const cards = await Promise.all(favs.map(async f => {
+        try {
+          const b = await db.getBlog(f.id);
+          return { ...f, categoria: b?.categoria || '', resumen: b?.resumen || '' };
+        } catch { return f; }
+      }));
+      grid.innerHTML = cards.map(f => `
+        <div class="fav-card">
+          <div class="fav-card-titulo" onclick="location.href='blog.html?id=${f.id}'">${f.titulo}</div>
+          ${f.categoria ? `<span style="font-size:0.72rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);">${f.categoria}</span>` : ''}
+          ${f.resumen ? `<p style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">${f.resumen}</p>` : ''}
+          <div class="fav-card-acciones">
+            <a href="blog.html?id=${f.id}" class="btn-fav-ir">Leer →</a>
+            <button class="btn-fav-quitar" onclick="quitarBlog('${f.id}')">✕ Quitar</button>
+          </div>
+        </div>
+      `).join('');
+    } catch(e) {
+      grid.innerHTML = '<p class="favs-vacio">Error al cargar blogs guardados.</p>';
+    }
+  }
+
+  async function renderFavsCursos() {
+    const grid = document.getElementById('favs-cursos-grid');
+    const favs = getCursosFavs();
+    if (favs.length === 0) {
+      grid.innerHTML = '<p class="favs-vacio">No tienes cursos guardados aún. Explora los <a href="servicios.html" style="color:var(--gold)">cursos disponibles</a>.</p>';
+      return;
+    }
+    try {
+      const todos = await db.getCursos();
+      const cards = favs.map(f => {
+        const c = todos.find(x => String(x.id) === String(f.id));
+        return { ...f, precio: c?.precio || '', duracion: c?.duracion || '', resumen: c?.resumen || c?.descripcion || '' };
+      });
+      grid.innerHTML = cards.map(f => `
+        <div class="fav-card">
+          <div class="fav-card-titulo" onclick="location.href='servicios.html?curso=${f.id}'">${f.titulo}</div>
+          ${f.precio ? `<span style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold);font-weight:700;">Bs. ${f.precio}</span>` : ''}
+          ${f.resumen ? `<p style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">${f.resumen}</p>` : ''}
+          <div class="fav-card-acciones">
+            <a href="servicios.html?curso=${f.id}" class="btn-fav-ir">Ver curso →</a>
+            <button class="btn-fav-quitar" onclick="quitarCurso(${f.id})">✕ Quitar</button>
+          </div>
+        </div>
+      `).join('');
+    } catch(e) {
+      grid.innerHTML = '<p class="favs-vacio">Error al cargar cursos guardados.</p>';
+    }
+  }
+
+  window.quitarBlog = function(id) {
+    saveBlogsFavs(getBlogsFavs().filter(f => f.id !== id));
+    renderFavsBlogs();
+  };
+
+  window.quitarCurso = function(id) {
+    saveCursosFavs(getCursosFavs().filter(f => f.id !== id));
+    renderFavsCursos();
+  };
+
+  renderFavsBlogs();
+  renderFavsCursos();
+  </script>
+
+</body>
+</html>
