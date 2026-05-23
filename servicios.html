@@ -467,16 +467,27 @@
   };
 
 window.toggleCursoFavCard = function(id, titulo, btn) {
-  let favs = getCursosFavs();
-  const idx = favs.findIndex(f => f.id === id);
-  if (idx >= 0) favs.splice(idx, 1);
-  else favs.unshift({ id, titulo });
-  saveCursosFavs(favs);
-  renderCursosFavSidebar();
-  const esFav = favs.some(f => f.id === id);
-  btn.textContent = esFav ? '⭐ Guardado' : '⭐ Guardar';
-  btn.classList.toggle('active', esFav);
-};
+    let favs = getCursosFavs();
+    const idx = favs.findIndex(f => f.id === id);
+    if (idx >= 0) favs.splice(idx, 1);
+    else favs.unshift({ id, titulo });
+    saveCursosFavs(favs);
+    renderCursosFavSidebar();
+    const esFav = favs.some(f => f.id === id);
+    btn.textContent = esFav ? '⭐ Guardado' : '⭐ Guardar';
+    btn.classList.toggle('active', esFav);
+  };
+
+  window.compartirCurso = function(tituloEnc, id) {
+    const url = id
+      ? `${window.location.origin}/servicios.html?curso=${id}`
+      : window.location.href;
+    if (navigator.share) {
+      navigator.share({ title: decodeURIComponent(tituloEnc) + ' — Ayllón Tributaria', url });
+    } else {
+      navigator.clipboard.writeText(url).then(() => alert('¡Enlace copiado al portapapeles!'));
+    }
+  };
 
   function mostrarDetalle(c) {
     document.querySelectorAll('body > *:not(#curso-detalle):not(nav)').forEach(el => el.style.display = 'none');
