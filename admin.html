@@ -255,6 +255,9 @@
         <div class="admin-form">
           <h3 id="blog-form-titulo">➕ Nuevo artículo</h3>
           <input type="hidden" id="blog-edit-id">
+          <input type="hidden" id="blog-img-portada-actual">
+          <input type="hidden" id="blog-img-medio-actual">
+          <input type="hidden" id="blog-img-final-actual">
           <div class="admin-form-grid">
             <div class="form-field">
               <label>Título *</label>
@@ -343,6 +346,7 @@
         <div class="admin-form">
           <h3 id="curso-form-titulo">➕ Nuevo curso</h3>
           <input type="hidden" id="curso-edit-id">
+          <input type="hidden" id="curso-img-actual">
           <div class="admin-form-grid">
             <div class="form-field">
               <label>Título del curso *</label>
@@ -683,9 +687,9 @@
         imagen_final_caption:  document.getElementById('blog-img-final-caption').value.trim(),
       };
 
-      if (urlPortada) datos.imagen_portada = urlPortada;
-      if (urlMedio)   datos.imagen_medio   = urlMedio;
-      if (urlFinal)   datos.imagen_final   = urlFinal;
+      datos.imagen_portada = urlPortada || document.getElementById('blog-img-portada-actual').value || null;
+      datos.imagen_medio   = urlMedio   || document.getElementById('blog-img-medio-actual').value   || null;
+      datos.imagen_final   = urlFinal   || document.getElementById('blog-img-final-actual').value   || null;
 
       if (editId) {
         await db.updateBlog(editId, datos);
@@ -711,6 +715,9 @@
     ['blog-img-portada','blog-img-medio','blog-img-final'].forEach(id => document.getElementById(id).value = '');
     ['prev-portada','prev-medio','prev-final'].forEach(id => document.getElementById(id).classList.remove('visible'));
     document.getElementById('blog-edit-id').value = '';
+    document.getElementById('blog-img-portada-actual').value = '';
+    document.getElementById('blog-img-medio-actual').value   = '';
+    document.getElementById('blog-img-final-actual').value   = '';
     document.getElementById('blog-form-titulo').textContent = '➕ Nuevo artículo';
     document.getElementById('btn-guardar-blog').textContent = 'Publicar artículo';
     document.getElementById('btn-cancelar-blog').style.display = 'none';
@@ -729,6 +736,9 @@
     document.getElementById('blog-contenido3').value     = b.contenido3 || '';
     document.getElementById('blog-img-medio-caption').value = b.imagen_medio_caption || '';
     document.getElementById('blog-img-final-caption').value = b.imagen_final_caption || '';
+    document.getElementById('blog-img-portada-actual').value = b.imagen_portada || '';
+    document.getElementById('blog-img-medio-actual').value   = b.imagen_medio   || '';
+    document.getElementById('blog-img-final-actual').value   = b.imagen_final   || '';
     if (b.imagen_portada) { document.getElementById('prev-portada').src = b.imagen_portada; document.getElementById('prev-portada').classList.add('visible'); }
     if (b.imagen_medio)   { document.getElementById('prev-medio').src   = b.imagen_medio;   document.getElementById('prev-medio').classList.add('visible'); }
     if (b.imagen_final)   { document.getElementById('prev-final').src   = b.imagen_final;   document.getElementById('prev-final').classList.add('visible'); }
@@ -793,7 +803,7 @@
         duracion:    document.getElementById('curso-duracion').value.trim(),
         descripcion: desc,
       };
-      if (urlImg) datos.imagen = urlImg;
+      datos.imagen = urlImg || document.getElementById('curso-img-actual').value || null;
 
       if (editId) {
         await db.updateCurso(editId, datos);
@@ -818,6 +828,7 @@
     document.getElementById('curso-img').value = '';
     document.getElementById('prev-curso').classList.remove('visible');
     document.getElementById('curso-edit-id').value = '';
+    document.getElementById('curso-img-actual').value = '';
     document.getElementById('curso-form-titulo').textContent = '➕ Nuevo curso';
     document.getElementById('btn-guardar-curso').textContent = 'Guardar curso';
     document.getElementById('btn-cancelar-curso').style.display = 'none';
@@ -834,6 +845,7 @@
     document.getElementById('curso-precio').value       = c.precio || '';
     document.getElementById('curso-duracion').value     = c.duracion || '';
     document.getElementById('curso-descripcion').value  = c.descripcion || '';
+    document.getElementById('curso-img-actual').value = c.imagen || '';
     if (c.imagen) { document.getElementById('prev-curso').src = c.imagen; document.getElementById('prev-curso').classList.add('visible'); }
     document.getElementById('curso-form-titulo').textContent = '✏️ Editando curso';
     document.getElementById('btn-guardar-curso').textContent = 'Guardar cambios';
