@@ -177,6 +177,9 @@ def create_blog():
 @require_admin
 def update_blog(id):
     d = request.json
+    b = query('SELECT * FROM blogs WHERE id=%s', (id,), fetchone=True)
+    if not b:
+        return jsonify({'error': 'No encontrado'}), 404
     query('''UPDATE blogs SET
         titulo=%s, categoria=%s, autor=%s, resumen=%s, contenido=%s,
         contenido2=%s, contenido3=%s, imagen_portada=%s, imagen_medio=%s,
@@ -184,8 +187,11 @@ def update_blog(id):
         WHERE id=%s''',
         (d.get('titulo'), d.get('categoria'), d.get('autor'), d.get('resumen'),
          d.get('contenido'), d.get('contenido2'), d.get('contenido3'),
-         d.get('imagen_portada'), d.get('imagen_medio'), d.get('imagen_medio_caption'),
-         d.get('imagen_final'), d.get('imagen_final_caption'), id),
+         d.get('imagen_portada') or b['imagen_portada'],
+         d.get('imagen_medio')   or b['imagen_medio'],
+         d.get('imagen_medio_caption'),
+         d.get('imagen_final')   or b['imagen_final'],
+         d.get('imagen_final_caption'), id),
         commit=True)
     return jsonify({'ok': True})
 
@@ -217,10 +223,13 @@ def create_curso():
 @require_admin
 def update_curso(id):
     d = request.json
+    c = query('SELECT * FROM cursos WHERE id=%s', (id,), fetchone=True)
+    if not c:
+        return jsonify({'error': 'No encontrado'}), 404
     query('''UPDATE cursos SET titulo=%s, resumen=%s, descripcion=%s, contenido=%s,
         imagen=%s, modalidad=%s, precio=%s, duracion=%s, estado=%s WHERE id=%s''',
         (d.get('titulo'), d.get('resumen'), d.get('descripcion'), d.get('contenido'),
-         d.get('imagen'), d.get('modalidad'),
+         d.get('imagen') or c['imagen'], d.get('modalidad'),
          d.get('precio'), d.get('duracion'), d.get('estado'), id),
         commit=True)
     return jsonify({'ok': True})
